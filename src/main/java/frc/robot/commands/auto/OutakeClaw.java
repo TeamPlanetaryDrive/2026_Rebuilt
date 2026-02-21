@@ -5,8 +5,8 @@ import frc.robot.subsystems.bot.ClawSpinSubsystem;
 
 public class OutakeClaw extends Command {
 
-    private ClawSpinSubsystem claw;
-    final private double spinClawAmount;
+    private final ClawSpinSubsystem claw;
+    private final double spinClawAmount;
 
     public OutakeClaw(ClawSpinSubsystem claw) {
         spinClawAmount = -1; //TODO: Needs testing

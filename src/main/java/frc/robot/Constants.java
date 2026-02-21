@@ -9,6 +9,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+    /* TECHNICALLY, these all need getters, but that would genuinely just
+    overcomplicate things, because getClimbAngle() is just longer than climbAngle.
+    This is also technically a data leak/lack of encapsulation, but again, I think
+    having getters for everything would be over the top and decrease readibility.
+    */
     public static final class ArmConstants {
         public static final double beginningArmPosition = -23;
         public static final double beginningClawPosition = -15;
@@ -127,6 +132,7 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
+        //camera constants
         public static final Transform3d cameraPositionRobotRel = new Transform3d(new Translation3d(-0.5, 0, -0.5), new Rotation3d());
         public static final Transform3d robotPositionCameraRel = cameraPositionRobotRel.inverse();
         public static final int photonVisionPort = 2856;
@@ -134,11 +140,12 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
+        // acceleration and angular per second
         public static final double kMaxSpeedMetersPerSecond = 1;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
+        //controllers
         public static final double kPXController = 1;
         public static final double kPYController = 1;
         public static final double kPThetaController = 1;
@@ -147,8 +154,9 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
-
+    //Neo Motor Constants
     public static final class NeoMotorConstants {
+        // the fact this gets its own class pisses me off
         public static final double kFreeSpeedRpm = 5676;
     }
 }

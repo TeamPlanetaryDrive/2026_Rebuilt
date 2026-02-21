@@ -25,7 +25,7 @@ public final class Configs {
                 .smartCurrentLimit(40);
             extendConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pidf(1, 0, 0, 0)
+                .pid(1, 0, 0)
                 .outputRange(-.75, .5);
 
             pivotRConfig
@@ -35,7 +35,7 @@ public final class Configs {
                 .positionConversionFactor(360);
             pivotRConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                .pidf(0.015, 0, 0.2, 0)
+                .pid(0.015, 0, 0.2)
                 .outputRange(-0.1, 0.1)
                 .positionWrappingEnabled(true).positionWrappingInputRange(0, 360);
                 
@@ -49,7 +49,7 @@ public final class Configs {
                 .smartCurrentLimit(20);
             clawPivotConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pidf(.5, 0, 0, 0)
+                .pid(.5, 0, 0)
                 .outputRange(-.25, .25);
 
             clawSpinConfig
@@ -57,7 +57,7 @@ public final class Configs {
                 .smartCurrentLimit(20);
             clawSpinConfig.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .pidf(.4, .0, .0, 0)
+                .pid(.4, .0, .0)
                 .outputRange(-.5, .5);
         }
     }
@@ -83,7 +83,7 @@ public final class Configs {
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // These are example gains you may need to them for your own robot!
                     .pid(0.04, 0, 0)
-                    .velocityFF(drivingVelocityFeedForward)
+                    .velocityFF(drivingVelocityFeedForward) //TODO: Replace with a feed foward method.
                     .outputRange(-1, 1);
 
             turningConfig

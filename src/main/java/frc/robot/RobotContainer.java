@@ -4,12 +4,21 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.arm.PivotUpDown;
@@ -21,16 +30,6 @@ import frc.robot.subsystems.bot.ArmSubsystem;
 import frc.robot.subsystems.bot.ClawSpinSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -41,7 +40,7 @@ import edu.wpi.first.cscore.UsbCamera;
 public class RobotContainer {
 
   // The robot's subsystems
-  private SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000", m_robotDrive);
   private final ArmSubsystem m_arm = new ArmSubsystem(); 

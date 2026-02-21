@@ -14,9 +14,9 @@ import frc.robot.Constants;
 
 public class ClawSpinSubsystem extends SubsystemBase {
 
-    private SparkMax clawSpin;    
-    private SparkClosedLoopController clawSpinPID;    
-    private RelativeEncoder clawSpinEncoder;
+    private final SparkMax clawSpin;    
+    private final SparkClosedLoopController clawSpinPID;    
+    private final RelativeEncoder clawSpinEncoder;
     
     public ClawSpinSubsystem() {
         clawSpin = new SparkMax(Constants.ArmConstants.clawSpinCANID, SparkLowLevel.MotorType.kBrushless);
@@ -24,16 +24,16 @@ public class ClawSpinSubsystem extends SubsystemBase {
         clawSpinPID = clawSpin.getClosedLoopController();
         
         clawSpin.configure(Configs.ArmSubsystem.clawSpinConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+        //TODO: remove configure
         configEncoders();
     }
     
-
-    public void configEncoders() {
+    
+    public final void configEncoders() {
         clawSpinEncoder.setPosition(0);
     }
 
     public void spinClaw(double value) {
-        clawSpinPID.setReference(value * Constants.ArmConstants.intakePercent, ControlType.kDutyCycle);
+        clawSpinPID.setSetpoint(value * Constants.ArmConstants.intakePercent, ControlType.kDutyCycle);
     }
 }
