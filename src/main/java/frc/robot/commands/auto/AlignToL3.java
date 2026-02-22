@@ -26,7 +26,7 @@ public class AlignToL3 extends Command{
         this.drive = drive;
         this.photonvision = photonvision;
     }
-
+    @Override
     public void initialize() {
         Pose2d pose = drive.getPose();
         Pose2d aprilTagPose = photonvision.getAprilTagPose(
@@ -48,7 +48,7 @@ public class AlignToL3 extends Command{
 
         endingPose = new Pose2d(x, y, new Rotation2d(angle));
 
-        ArrayList<Pose2d> poses = new ArrayList<Pose2d>();
+        ArrayList<Pose2d> poses = new ArrayList<>();
         poses.add(pose);
         poses.add(endingPose);
 
@@ -78,12 +78,13 @@ public class AlignToL3 extends Command{
         CommandScheduler.getInstance().schedule(command.andThen(() -> drive.drive(0, 0, 0, false)));
 
     }
-
+    @Override
     public void execute() {}
-
+    @Override
     public boolean isFinished() {
         return true;
     }
-    
+    @Override
     public void end(boolean interrupted) {}
+    //TODO: Added Overrides, test.
 }

@@ -4,34 +4,40 @@
 
 package frc.robot.subsystems.drive;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.json.simple.parser.ParseException;
+import org.photonvision.EstimatedRobotPose;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
-
-import java.io.IOException;
-import java.util.List;
-import org.photonvision.EstimatedRobotPose;
-
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
-
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -42,17 +48,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -100,6 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
     visionMeasurementStdDevs
   );
   /** Creates a new DriveSubsystem. */
+  @SuppressWarnings("CallToPrintStackTrace")
   public DriveSubsystem() {
     AprilTagFieldLayout layout;
     try {
@@ -110,7 +111,7 @@ public class DriveSubsystem extends SubsystemBase {
             OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
     } catch (IOException e) {
         DriverStation.reportError("failed to load april tag field layout", e.getStackTrace());
-        layout = null;
+        //TODO: removed "layout = null;" as it is not used anywhere else and just overwritten next time this is called.
     }
     ShuffleboardTab tab = Shuffleboard.getTab("Vision");
     
@@ -124,7 +125,7 @@ public class DriveSubsystem extends SubsystemBase {
     RobotConfig config;
     try{
       config = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
+    } catch (IOException | ParseException e) {
       config = new RobotConfig(74.088, 6.883, new ModuleConfig(0.048, 5.450, 1.200, DCMotor.getNEO(1), 50, 1), new Translation2d[] {new Translation2d(.273, .273), new Translation2d(.273, -.273), new Translation2d(-.273, .273), new Translation2d(-.273, -.273)});
       e.printStackTrace();
     }
@@ -146,8 +147,9 @@ public class DriveSubsystem extends SubsystemBase {
                 return alliance.get() == DriverStation.Alliance.Red;
               }
               return false;
-            },
-            this // Reference to this subsystem to set requirements
+            }//,
+            //this // Reference to this subsystem to set requirements
+            //TODO: With "this" comment, does something break?
     );
   }
 

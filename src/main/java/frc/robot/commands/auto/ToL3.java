@@ -7,7 +7,7 @@ import frc.robot.subsystems.bot.ArmSubsystem;
 
 public class ToL3 extends Command {
 
-    private ArmSubsystem arm; 
+    private final ArmSubsystem arm; 
     private double angle;
     private double distance;
     private double clawAngle; 

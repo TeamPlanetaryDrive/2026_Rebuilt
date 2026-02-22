@@ -1,14 +1,5 @@
 package frc.robot.utils;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants.*;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.subsystems.vision.PhotonVision;
-import edu.wpi.first.math.trajectory.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -17,6 +8,16 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.vision.PhotonVision;
 
 public class TrajectoryFollowerBuilder {
     private final ProfiledPIDController thetaController;
@@ -58,27 +59,14 @@ public class TrajectoryFollowerBuilder {
         Trajectory trajectory;
         Pose2d endingPose;
         double distance;
-        switch(SmartDashboard.getString("CURRENT SETPOINT", "L4")) {
-            case "INTAKE":
-                distance = .2413;
-                break;
-            case "L1":
-                distance = .25;
-                break;
-            case "L2":
-                distance = .25;
-                break;
-            case "L3":
-                distance = .25;
-                break;
-            case "L4":
-                distance = .25;
-                break;
-            case "CLIMB":
-                distance = .25;
-                break;
-            default:
-                return null;
+        //redo for small code statement
+        String currentLevel = SmartDashboard.getString("CURRENT SETPOINT", "L4");
+        if (currentLevel.equals("INTAKE")) {
+            distance = .2413;
+        } else if(UtilityMethods.contains( new String[]{"CLIMB", "L1", "L2", "L3", "L4"}, currentLevel)) {
+            distance = .25;
+        } else {
+            return null;
         }
 
         double angle = aprilTagPose.getRotation().getRadians();
@@ -90,7 +78,7 @@ public class TrajectoryFollowerBuilder {
 
         endingPose = new Pose2d(x, y, new Rotation2d(angle));
 
-        ArrayList<Pose2d> poses = new ArrayList<Pose2d>();
+        ArrayList<Pose2d> poses = new ArrayList<>();
         poses.add(currentPose);
         poses.add(endingPose);
 

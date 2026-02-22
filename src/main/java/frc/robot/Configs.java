@@ -83,9 +83,11 @@ public final class Configs {
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // These are example gains you may need to them for your own robot!
                     .pid(0.04, 0, 0)
-                    .velocityFF(drivingVelocityFeedForward) //TODO: Replace with a feed foward method.
+                    .velocityFF(drivingVelocityFeedForward)
                     .outputRange(-1, 1);
-
+            //TODO: figure out how to set feed forward without using the deprecated feedForward field
+            //drivingConfig.closedLoop.outputRange(-1,1);
+            // This line ^^^ was addded while I was trying to figure out how to set feed forward.
             turningConfig
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(20);

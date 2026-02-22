@@ -27,8 +27,7 @@ public final class Constants {
         // rotations to cm
         public static final double armExtensionConversionFactor = 5.793103448;
 
-        public static final double intakeAngle = 52
-        ;  // deg
+        public static final double intakeAngle = 52;  // deg
         public static final double l1Angle = 45; 
         public static final double l2Angle = 55; 
         public static final double l3Angle = 72; 

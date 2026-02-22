@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+//import org.photonvision.PhotonPoseEstimator.PoseStrategy; not used
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -18,10 +18,10 @@ import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.subsystems.drive.DriveSubsystem; 
 
 public class PhotonVision extends SubsystemBase {
-    private DriveSubsystem m_driveSubsystem; 
-    private PhotonCamera camera; 
-    private AprilTagFieldLayout layout; 
-    private PhotonPoseEstimator poseEstimator;
+    private final DriveSubsystem m_driveSubsystem; 
+    private final PhotonCamera camera; 
+    private final AprilTagFieldLayout layout; 
+    private final PhotonPoseEstimator poseEstimator;
     private PhotonPipelineResult result;
     private Optional<EstimatedRobotPose> pose;
 
@@ -29,16 +29,44 @@ public class PhotonVision extends SubsystemBase {
         m_driveSubsystem = drive; 
         camera = new PhotonCamera(cameraName);
         layout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
-        poseEstimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, PhotonVisionConstants.transform);
+        poseEstimator = new PhotonPoseEstimator(layout, PhotonVisionConstants.transform);
+        //PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, was in between layout and PhotoVisionConstants.transform
+        //TODO: PhotonPoseEstimator constructors with three arguments are depracated
     }
 
     @Override
     public void periodic() {
         List<PhotonPipelineResult> temp = camera.getAllUnreadResults();
-        if(temp.size() > 0) {
+        if(!temp.isEmpty()) {
             result = temp.get(temp.size()-1);
             if(result.hasTargets())
             {
+                /* TODO: Figure out how to update() without deprecated method. We can probably use these but I don't know the exacts:
+                .estimatePnpDistanceTrigSolvePose(PhotonPipelineResult cameraResult)
+                .estimateConstrainedSolvepnpPose(
+                                                PhotonPipelineResult cameraResult,
+                                                Matrix<N3,N3> cameraMatrix,
+                                                Matrix<N8,N1> distCoeffs,
+                                                Pose3d seedPose,
+                                                boolean headingFree,
+                                                double headingScaleFactor)
+                .estimateCoprocMultiTagPose(PhotonPipelineResult cameraResult)
+                .estimateRioMultiTagPose(
+                                        PhotonPipelineResult cameraResult,
+                                        Matrix<N3,N3> cameraMatrix,
+                                        Matrix<N8,N1> distCoeffs)
+                .estimateLowestAmbiguityPose(PhotonPipelineResult cameraResult)
+                .estimateClosestToCameraHeightPose(PhotonPipelineResult cameraResult)
+                .estimateClosestToReferencePose(
+                                                PhotonPipelineResult cameraResult,
+                                                Pose3d referencePose)
+                .estimateAverageBestTargetsPose(PhotonPipelineResult cameraResult)
+                .estimatePnpDistanceTrigSolvePose(PhotonPipelineResult cameraResult)
+                .estimateRioMultiTagPose(
+                                        PhotonPipelineResult cameraResult,
+                                        Matrix<N3,N3> cameraMatrix,
+                                        Matrix<N8,N1> distCoeffs)
+                */
                 pose = poseEstimator.update(result);
                 m_driveSubsystem.addVision(pose.get());
             } 
@@ -85,10 +113,10 @@ public class PhotonVision extends SubsystemBase {
     }
 
     public Pose3d getPoseById(int fiducialId) {
-        Optional<Pose3d> pose = layout.getTagPose(fiducialId);
-        if(!pose.isPresent()) {
+        Optional<Pose3d> poseEx = layout.getTagPose(fiducialId);
+        if(!poseEx.isPresent()) {
             return null;
         }
-        return pose.get();
+        return poseEx.get();
     }
 } 

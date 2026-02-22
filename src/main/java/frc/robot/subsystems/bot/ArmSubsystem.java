@@ -1,13 +1,14 @@
 package frc.robot.subsystems.bot;
 
+// PersistMode and ResetMode were originally in com.revrobotics.spark.SparkBase, but that has been deprecated.
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,7 +43,6 @@ public class ArmSubsystem extends SubsystemBase {
         armPivotR = new SparkMax(Constants.ArmConstants.armPivotRCANID, SparkLowLevel.MotorType.kBrushless);
         clawPivot = new SparkMax(Constants.ArmConstants.clawPivotCANID, SparkLowLevel.MotorType.kBrushless);
 
-        // TODO: remove deprecated methods/classes here
         armExtend.configure(Configs.ArmSubsystem.extendConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         armPivotL.configure(Configs.ArmSubsystem.pivotLConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         armPivotR.configure(Configs.ArmSubsystem.pivotRConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -61,7 +61,6 @@ public class ArmSubsystem extends SubsystemBase {
 
         SmartDashboard.putString("SELECTED LEVEL", levels[currentLevel]);
     }
-    //TODO: configEncoders is final, hopefully it doesnt error so do test
     public final void configEncoders() {
         armExtendEncoder.setPosition(0);
         clawPivotEncoder.setPosition(Constants.ArmConstants.beginningClawPosition);
@@ -79,7 +78,7 @@ public class ArmSubsystem extends SubsystemBase {
     
     public void pivotClaw(double angleDegrees) {
         double outputRotations = angleDegrees / 360 * 63;
-        clawPivotPID.setSetpoint(outputRotations, ControlType.kPosition); //TODO: test since we changed from setReference to setSetpoint
+        clawPivotPID.setSetpoint(outputRotations, ControlType.kPosition);
     }
 
     public void incrementLevel() {
