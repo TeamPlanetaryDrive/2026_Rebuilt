@@ -31,7 +31,6 @@ public class PhotonVision extends SubsystemBase {
         layout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
         poseEstimator = new PhotonPoseEstimator(layout, PhotonVisionConstants.transform);
         //PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, was in between layout and PhotoVisionConstants.transform
-        //TODO: PhotonPoseEstimator constructors with three arguments are depracated
     }
 
     @Override

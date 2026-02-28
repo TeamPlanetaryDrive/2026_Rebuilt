@@ -33,8 +33,6 @@ public class ArmSubsystem extends SubsystemBase {
     private final RelativeEncoder clawPivotEncoder;
 
     private int currentLevel = 0;
-    //private HashMap<Integer, String> map;
-    // TODO: Remove this line if you agree to use the String array instead of the HashMap.
     private final String[] levels = {"INTAKE", "L1", "L2", "L3", "L4", "CLIMB", "BOTTOM", "VERTICAL"};
 
     public ArmSubsystem() {
