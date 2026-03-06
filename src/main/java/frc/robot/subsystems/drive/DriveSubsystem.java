@@ -111,7 +111,6 @@ public class DriveSubsystem extends SubsystemBase {
             OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
     } catch (IOException e) {
         DriverStation.reportError("failed to load april tag field layout", e.getStackTrace());
-        //TODO: removed "layout = null;" as it is not used anywhere else and just overwritten next time this is called.
     }
     ShuffleboardTab tab = Shuffleboard.getTab("Vision");
     

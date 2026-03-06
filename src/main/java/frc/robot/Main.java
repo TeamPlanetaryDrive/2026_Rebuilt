@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * call.
  */
 public final class Main {
-  //TODO:Removed Constructor for Main, as it was blank and is not needed.
   /**
    * Main initialization function. Do not perform any initialization here.
    *
