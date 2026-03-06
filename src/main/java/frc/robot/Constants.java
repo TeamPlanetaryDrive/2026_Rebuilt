@@ -50,6 +50,10 @@ public final class Constants {
 
         public static final double intakePercent = .8;
     }
+    public static final class intakeConstants{
+        public static final int intakePivotCANID = 1;
+        public static final int intakeSpinCANID = 2;
+    }
 
     public static final class PhotonVisionConstants {
 
