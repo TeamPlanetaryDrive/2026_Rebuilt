@@ -57,9 +57,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
 
-    NamedCommands.registerCommand("ToL4", new ToL3(m_arm));
+    //NamedCommands.registerCommand("ToL4", new ToL3(m_arm));
     NamedCommands.registerCommand("AlignToL4", new AlignToL3(m_robotDrive, m_photonVision));
-    NamedCommands.registerCommand("OutakeClaw", new OutakeClaw(m_clawSpinner));
+    // NamedCommands.registerCommand("OutakeClaw", new OutakeClaw(m_clawSpinner));
 
     configureDashboard();
     configureButtonBindings();
@@ -115,21 +115,23 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kRightStick.value).onTrue(new ArmCommand(m_arm)); //set arm level
-    new JoystickButton(m_driverController, Button.kLeftBumper.value).onTrue(m_arm.runOnce(() -> m_arm.incrementLevel())); //increment value
-    new JoystickButton(m_driverController, Button.kRightBumper.value).onTrue(m_arm.runOnce(() -> m_arm.decrementLevel())); //decrement value
-    new JoystickButton(m_driverController, Button.kStart.value).whileTrue(m_arm.run(() -> m_arm.resetClaw())); // Climb
+    // new JoystickButton(m_driverController, Button.kRightStick.value).onTrue(new ArmCommand(m_arm)); //set arm level
+    // new JoystickButton(m_driverController, Button.kLeftBumper.value).onTrue(m_arm.runOnce(() -> m_arm.incrementLevel())); //increment value
+    // new JoystickButton(m_driverController, Button.kRightBumper.value).onTrue(m_arm.runOnce(() -> m_arm.decrementLevel())); //decrement value
+    // new JoystickButton(m_driverController, Button.kStart.value).whileTrue(m_arm.run(() -> m_arm.resetClaw())); // Climb
     
-    new JoystickButton(m_driverController, Button.kBack.value).onTrue(m_arm.runOnce(() -> m_arm.start()));
+    // new JoystickButton(m_driverController, Button.kBack.value).onTrue(m_arm.runOnce(() -> m_arm.start()));
                                                                       
-    new JoystickButton(m_driverController, Button.kX.value).onTrue(m_arm.runOnce(() -> m_arm.setArmLevel(0)).andThen(new ArmCommand(m_arm))); 
-    new JoystickButton(m_driverController, Button.kA.value).onTrue(m_arm.runOnce(() -> m_arm.setArmLevel(3)).andThen(new ArmCommand(m_arm))); // Lineup to Climb
-    new JoystickButton(m_driverController, Button.kB.value).onTrue(m_arm.runOnce(() -> m_arm.setArmLevel(2)).andThen(new ArmCommand(m_arm))); // Lineup to Climb
-    new JoystickButton(m_driverController, Button.kY.value).onTrue(m_arm.runOnce(() -> m_arm.setArmLevel(1)).andThen(new ArmCommand(m_arm))); // Lineup to Climb
+    // new JoystickButton(m_driverController, Button.kX.value).onTrue(m_arm.runOnce(() -> m_arm.setArmLevel(0)).andThen(new ArmCommand(m_arm))); 
+    // new JoystickButton(m_driverController, Button.kA.value).onTrue(m_arm.runOnce(() -> m_arm.setArmLevel(3)).andThen(new ArmCommand(m_arm))); // Lineup to Climb
+    // new JoystickButton(m_driverController, Button.kB.value).onTrue(m_arm.runOnce(() -> m_arm.setArmLevel(2)).andThen(new ArmCommand(m_arm))); // Lineup to Climb
+    // new JoystickButton(m_driverController, Button.kY.value).onTrue(m_arm.runOnce(() -> m_arm.setArmLevel(1)).andThen(new ArmCommand(m_arm))); // Lineup to Climb
   
-    new POVButton(m_driverController, 90).whileTrue(new PivotUpDown(m_arm, .1));
-    new POVButton(m_driverController, 270).whileTrue(new PivotUpDown(m_arm, -.1));
-    new POVButton(m_driverController, 180).onTrue(new ResetClaw(m_arm));
+    // new POVButton(m_driverController, 90).whileTrue(new PivotUpDown(m_arm, .1));
+    // new POVButton(m_driverController, 270).whileTrue(new PivotUpDown(m_arm, -.1));
+    // new POVButton(m_driverController, 180).onTrue(new ResetClaw(m_arm));
+
+    
   }
 
   public Command getAutonomousCommand() {

@@ -14,45 +14,69 @@ public final class Constants {
     This is also technically a data leak/lack of encapsulation, but again, I think
     having getters for everything would be over the top and decrease readibility.
     */
-    public static final class ArmConstants {
-        public static final double beginningArmPosition = -23;
-        public static final double beginningClawPosition = -15;
+    // public static final class ArmConstants {
+    //     public static final double beginningArmPosition = -23;
+    //     public static final double beginningClawPosition = -15;
 
-        public static final int armExtendCANID = 1; 
-        public static final int armPivotRCANID = 2; 
-        public static final int armPivotLCANID = 3; 
-        public static final int clawPivotCANID = 4;
-        public static final int clawSpinCANID = 5; 
+    //     public static final int armExtendCANID = 1; 
+    //     public static final int armPivotRCANID = 2; 
+    //     public static final int armPivotLCANID = 3; 
+    //     public static final int clawPivotCANID = 4;
+    //     public static final int clawSpinCANID = 5; 
 
-        // rotations to cm
-        public static final double armExtensionConversionFactor = 5.793103448;
+    //     // rotations to cm
+    //     public static final double armExtensionConversionFactor = 5.793103448;
 
-        public static final double intakeAngle = 52;  // deg
-        public static final double l1Angle = 45; 
-        public static final double l2Angle = 55; 
-        public static final double l3Angle = 72; 
-        public static final double l4Angle = 72; 
-        public static final double climbAngle = 80;
+    //     public static final double intakeAngle = 52;  // deg
+    //     public static final double l1Angle = 45; 
+    //     public static final double l2Angle = 55; 
+    //     public static final double l3Angle = 72; 
+    //     public static final double l4Angle = 72; 
+    //     public static final double climbAngle = 80;
 
-        public static final double intakeExtension = 1.25;  // in
-        public static final double l1Extension = 4; 
-        public static final double l2Extension = 12; 
-        public static final double l3Extension = 14; 
-        public static final double l4Extension = 43.5; 
-        public static final double climbExtension = 0;
+    //     public static final double intakeExtension = 1.25;  // in
+    //     public static final double l1Extension = 4; 
+    //     public static final double l2Extension = 12; 
+    //     public static final double l3Extension = 14; 
+    //     public static final double l4Extension = 43.5; 
+    //     public static final double climbExtension = 0;
 
-        public static final double intakeClawAngle = -15;
-        public static final double l1ClawAngle = -45;
-        public static final double l2ClawAngle = -65;
-        public static final double l3ClawAngle = -85;
-        public static final double l4ClawAngle = -85;
-        public static final double climbClawAngle = 0;
+    //     public static final double intakeClawAngle = -15;
+    //     public static final double l1ClawAngle = -45;
+    //     public static final double l2ClawAngle = -65;
+    //     public static final double l3ClawAngle = -85;
+    //     public static final double l4ClawAngle = -85;
+    //     public static final double climbClawAngle = 0;
 
-        public static final double intakePercent = .8;
+    //     public static final double intakePercent = .8;
+    // }
+    // public static final class intakeConstants{
+    //     public static final int intakePivotCANID = 1;
+    //     public static final int intakeSpinCANID = 2;
+    // }
+    public static final class shooterConstants{
+        public static final int shooter1CANID = 1; // NEEDS TO BE FIXED
+        public static final int shooter2CANID = 2; // NEEDS TO BE FIXED
+        public static final int shooter3CANID = 3; // NEEDS TO BE FIXED
+        public static final int shooter1Encoder = 4; // NEEDS TO BE FIXED
+        public static final int shooter2Encoder = 5; // NEEDS TO BE FIXED
+        public static final int shooter3Encoder = 6; // NEEDS TO BE FIXED
+
     }
+
+    public static final class feederConstants{
+        public static final int feederLeadCANID = 1; // NEEDS TO BE FIXED
+        public static final int feederFollowCANID = 2; // NEEDS TO BE FIXED
+    }
+
     public static final class intakeConstants{
-        public static final int intakePivotCANID = 1;
-        public static final int intakeSpinCANID = 2;
+        public static final int intakeAngleMotorCANID = 1; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorCANID = 2; // NEEDS TO BE FIXED
+        public static final int intakeAngleMotorEncoder = 3; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorEncoder = 4; // NEEDS TO BE FIXED
+        public static final int intakeAngleMotorPID = 5; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorPID = 6; // NEEDS TO BE FIXED
+
     }
 
     public static final class PhotonVisionConstants {
@@ -99,15 +123,15 @@ public final class Constants {
         public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
         // SPARK MAX CAN IDs
-        public static final int kFrontLeftDrivingCanId = 18;
+        public static final int kFrontLeftDrivingCanId = 16;
         public static final int kRearLeftDrivingCanId = 15;
-        public static final int kFrontRightDrivingCanId = 17;
-        public static final int kRearRightDrivingCanId = 16;
+        public static final int kFrontRightDrivingCanId = 1;
+        public static final int kRearRightDrivingCanId = 17;
 
-        public static final int kFrontLeftTurningCanId = 14;
+        public static final int kFrontLeftTurningCanId = 12;
         public static final int kRearLeftTurningCanId = 11;
-        public static final int kFrontRightTurningCanId = 13;
-        public static final int kRearRightTurningCanId = 12;
+        public static final int kFrontRightTurningCanId = 14;
+        public static final int kRearRightTurningCanId = 13;
 
         public static final boolean kGyroReversed = true;
     }
@@ -142,24 +166,26 @@ public final class Constants {
         public static final String s_photonVisionPort = "5800";
     }
 
-    public static final class AutoConstants {
-        // acceleration and angular per second
-        public static final double kMaxSpeedMetersPerSecond = 1;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 1;
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-        //controllers
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+    // public static final class AutoConstants {
+    //     // acceleration and angular per second
+    //     public static final double kMaxSpeedMetersPerSecond = 1;
+    //     public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+    //     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    //     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    //     //controllers
+    //     public static final double kPXController = 1;
+    //     public static final double kPYController = 1;
+    //     public static final double kPThetaController = 1;
 
-        // Constraint for the motion profiled robot angle controller
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
-    }
+    //     // Constraint for the motion profiled robot angle controller
+    //     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+    //         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    // }
     //Neo Motor Constants
     public static final class NeoMotorConstants {
         // the fact this gets its own class pisses me off
         public static final double kFreeSpeedRpm = 5676;
     }
+
+    public static final class AutoConstants {}
 }
