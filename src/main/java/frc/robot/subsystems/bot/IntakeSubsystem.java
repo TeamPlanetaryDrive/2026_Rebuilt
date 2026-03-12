@@ -25,12 +25,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     public void setIntakeSpeed(double radiansPerSecond){
         //do we use radians per second?
-        intakeSpinEncoder.setSetPoint(radiansPerSecond, ControlType.kVelocity);
+        intakeSpinPID.setSetpoint(radiansPerSecond, ControlType.kVelocity);
     }
     public void rotateIntake(double angleDegrees){
         //blatant copy of the rotateArm
         angleDegrees *= -1;
-        intakePivotPID.setSetPoint(angleDegrees, ControlType.kPosition);
+        intakePivotPID.setSetpoint(angleDegrees, ControlType.kPosition);
 
     }
 }
