@@ -54,6 +54,30 @@ public final class Constants {
         public static final int intakePivotCANID = 1;
         public static final int intakeSpinCANID = 2;
     }
+    public static final class shooterConstants{
+        public static final int shooter1CANID = 1; // NEEDS TO BE FIXED
+        public static final int shooter2CANID = 2; // NEEDS TO BE FIXED
+        public static final int shooter3CANID = 3; // NEEDS TO BE FIXED
+        public static final int shooter1Encoder = 4; // NEEDS TO BE FIXED
+        public static final int shooter2Encoder = 5; // NEEDS TO BE FIXED
+        public static final int shooter3Encoder = 6; // NEEDS TO BE FIXED
+
+    }
+
+    public static final class feederConstants{
+        public static final int feederLeadCANID = 1; // NEEDS TO BE FIXED
+        public static final int feederFollowCANID = 2; // NEEDS TO BE FIXED
+    }
+
+    public static final class intakeConstants{
+        public static final int intakeAngleMotorCANID = 1; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorCANID = 2; // NEEDS TO BE FIXED
+        public static final int intakeAngleMotorEncoder = 3; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorEncoder = 4; // NEEDS TO BE FIXED
+        public static final int intakeAngleMotorPID = 5; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorPID = 6; // NEEDS TO BE FIXED
+
+    }
 
     public static final class PhotonVisionConstants {
 
@@ -99,15 +123,15 @@ public final class Constants {
         public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
         // SPARK MAX CAN IDs
-        public static final int kFrontLeftDrivingCanId = 18;
+        public static final int kFrontLeftDrivingCanId = 16;
         public static final int kRearLeftDrivingCanId = 15;
-        public static final int kFrontRightDrivingCanId = 17;
-        public static final int kRearRightDrivingCanId = 16;
+        public static final int kFrontRightDrivingCanId = 1;
+        public static final int kRearRightDrivingCanId = 17;
 
-        public static final int kFrontLeftTurningCanId = 14;
+        public static final int kFrontLeftTurningCanId = 12;
         public static final int kRearLeftTurningCanId = 11;
-        public static final int kFrontRightTurningCanId = 13;
-        public static final int kRearRightTurningCanId = 12;
+        public static final int kFrontRightTurningCanId = 14;
+        public static final int kRearRightTurningCanId = 13;
 
         public static final boolean kGyroReversed = true;
     }
@@ -162,4 +186,6 @@ public final class Constants {
         // the fact this gets its own class pisses me off
         public static final double kFreeSpeedRpm = 5676;
     }
+
+    // public static final class AutoConstants {}
 }
