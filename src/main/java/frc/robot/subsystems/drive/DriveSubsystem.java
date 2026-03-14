@@ -148,7 +148,6 @@ public class DriveSubsystem extends SubsystemBase {
               return false;
             }//,
             //this // Reference to this subsystem to set requirements
-            //TODO: With "this" comment, does something break?
     );
   }
 

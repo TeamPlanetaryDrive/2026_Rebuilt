@@ -20,14 +20,14 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.arm.ArmCommand;
-import frc.robot.commands.arm.PivotUpDown;
-import frc.robot.commands.arm.ResetClaw;
-import frc.robot.commands.auto.AlignToL3;
-import frc.robot.commands.auto.OutakeClaw;
-import frc.robot.commands.auto.ToL3;
-import frc.robot.subsystems.bot.ArmSubsystem;
-import frc.robot.subsystems.bot.ClawSpinSubsystem;
+// import frc.robot.commands.arm.ArmCommand;
+// import frc.robot.commands.arm.PivotUpDown;
+// import frc.robot.commands.arm.ResetClaw;
+// import frc.robot.commands.auto.AlignToL3;
+// import frc.robot.commands.auto.OutakeClaw;
+// import frc.robot.commands.auto.ToL3;
+// import frc.robot.subsystems.bot.ArmSubsystem;
+// import frc.robot.subsystems.bot.ClawSpinSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
 
@@ -43,8 +43,8 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000", m_robotDrive);
-  private final ArmSubsystem m_arm = new ArmSubsystem(); 
-  private final ClawSpinSubsystem m_clawSpinner = new ClawSpinSubsystem();
+  // private final ArmSubsystem m_arm = new ArmSubsystem(); 
+  // private final ClawSpinSubsystem m_clawSpinner = new ClawSpinSubsystem();
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -58,7 +58,7 @@ public class RobotContainer {
     // Configure the button bindings
 
     //NamedCommands.registerCommand("ToL4", new ToL3(m_arm));
-    NamedCommands.registerCommand("AlignToL4", new AlignToL3(m_robotDrive, m_photonVision));
+    // NamedCommands.registerCommand("AlignToL4", new AlignToL3(m_robotDrive, m_photonVision));
     // NamedCommands.registerCommand("OutakeClaw", new OutakeClaw(m_clawSpinner));
 
     configureDashboard();
@@ -82,14 +82,14 @@ public class RobotContainer {
       )
     );
 
-    m_clawSpinner.setDefaultCommand(
-      new RunCommand(
-        () -> m_clawSpinner.spinClaw(
-          MathUtil.applyDeadband(m_driverController.getLeftTriggerAxis() - m_driverController.getRightTriggerAxis(), OIConstants.kDriveDeadband)
-        ),
-        m_clawSpinner
-      )
-    );
+    // m_clawSpinner.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> m_clawSpinner.spinClaw(
+    //       MathUtil.applyDeadband(m_driverController.getLeftTriggerAxis() - m_driverController.getRightTriggerAxis(), OIConstants.kDriveDeadband)
+    //     ),
+    //     m_clawSpinner
+    //   )
+    // );
     
   }
 

@@ -7,37 +7,29 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import frc.robot.Constants;
-public class IntakeSubsystem extends SubsystemBase {
-    private final SparkMax intakePivot;
-    private final SparkMax intakeSpin;
-    private AbsoluteEncoder intakeAngleMotorEncoder;
+
+public class RelativeIntakeSubsystem extends SubsystemBase {
+    private SparkMax intakeAngleMotor;
+    private SparkMax intakeSpinMotor;
+    private RelativeEncoder intakeAngleMotorEncoder;
     private RelativeEncoder intakeSpinMotorEncoder;
     private SparkClosedLoopController intakeAngleMotorPID;
     private SparkClosedLoopController intakeSpinMotorPID;
 
 
     // intake motors
-    // using absolute encoders
-    public IntakeSubsystem(){
+    // using relative encoders
+    public RelativeIntakeSubsystem(){
         intakeAngleMotor = new SparkMax(Constants.intakeConstants.intakeAngleMotorCANID, SparkLowLevel.MotorType.kBrushless);
         intakeSpinMotor = new SparkMax(Constants.intakeConstants.intakeSpinMotorCANID, SparkLowLevel.MotorType.kBrushless);
-        intakeAngleMotorEncoder = intakeAngleMotor.getAbsoluteEncoder();
+        intakeAngleMotorEncoder = intakeAngleMotor.getEncoder();
         intakeSpinMotorEncoder = intakeSpinMotor.getEncoder();
         intakeAngleMotorPID = intakeAngleMotor.getClosedLoopController();
         intakeSpinMotorPID = intakeSpinMotor.getClosedLoopController();
-
-        SparkMaxConfig pivotConfig = new SparkMaxConfig();
-        pivotConfig.closedLoop.feedbackSensor(com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder);
-        
-        // Apply position conversion so setpoint is in Degrees
-        pivotConfig.absoluteEncoder.positionConversionFactor(360.0); 
-        
-        intakeAngleMotor.configure(pivotConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
     }
 
     public void configEncoders() {
-        // no need to set position for absolute encoders
-        // intakeAngleMotorEncoder.setPosition(0);
+        intakeAngleMotorEncoder.setPosition(0);
         intakeSpinMotorEncoder.setPosition(0);
     }
 
@@ -53,17 +45,28 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // zero velocity
     public void zeroVelocity() {
-        intakeAngleMotor.stopMotor();
-        intakeSpinMotor.stopMotor();
+        intakeAngleMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
+        intakeSpinMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
+    }
+
+    public void setIntakeAngle(double degrees){
+        double gearRatio = Constants.intakeConstants.intakeAngleMotorRatio; // FIX 
+
+        // 2. Convert Degrees to Rotations
+        // (Degrees / 360) gives you the fraction of a circle
+        double rotations = (degrees / 360.0) * gearRatio;
+
+        // 3. Send to the SparkMax PID Controller
+        // ControlType.kPosition tells the SparkMax to go to a specific spot and stay there
+        intakeAngleMotorPID.setSetpoint(rotations, SparkMax.ControlType.kPosition);
     }
     
     // start intake
     // relative intake assumes start angle is at maximum angle
-    // we start at some angle, and we need to rotate 140 degrees to get to the angle we need
-
+    // 0 angle is the angle we need (???)
     public void start() {
         setIntakeSpeed(1000);
-        setIntakeAngle(0);
+        setIntakeAngle(140);
     }
     public void stop() {
         zeroVelocity();

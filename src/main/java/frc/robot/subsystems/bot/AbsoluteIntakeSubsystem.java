@@ -7,29 +7,42 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import frc.robot.Constants;
-public class IntakeSubsystem extends SubsystemBase {
-    SparkMax intakePivot;
-    SparkMax intakeSpin;
-    private AbsoluteEncoder intakePivotEncoder;
-    private RelativeEncoder intakeSpinEncoder;
-    private SparkClosedLoopController intakePivotPID;
-    private SparkClosedLoopController intakeSpinPID;
+import com.revrobotics.ResetMode;
+import com.revrobotics.PersistMode;
+
+public class AbsoluteIntakeSubsystem extends SubsystemBase {
+    private SparkMax intakeAngleMotor;
+    private SparkMax intakeSpinMotor;
+    private AbsoluteEncoder intakeAngleMotorEncoder;
+    private RelativeEncoder intakeSpinMotorEncoder;
+    private SparkClosedLoopController intakeAngleMotorPID;
+    private SparkClosedLoopController intakeSpinMotorPID;
 
 
     // intake motors
     // using relative encoders
-    public IntakeSubsystem(){
+    public AbsoluteIntakeSubsystem(){
         intakeAngleMotor = new SparkMax(Constants.intakeConstants.intakeAngleMotorCANID, SparkLowLevel.MotorType.kBrushless);
         intakeSpinMotor = new SparkMax(Constants.intakeConstants.intakeSpinMotorCANID, SparkLowLevel.MotorType.kBrushless);
-        intakeAngleMotorEncoder = intakeAngleMotor.getEncoder();
+        intakeAngleMotorEncoder = intakeAngleMotor.getAbsoluteEncoder();
         intakeSpinMotorEncoder = intakeSpinMotor.getEncoder();
         intakeAngleMotorPID = intakeAngleMotor.getClosedLoopController();
         intakeSpinMotorPID = intakeSpinMotor.getClosedLoopController();
+
+        configEncoders();
     }
 
     public void configEncoders() {
-        intakeAngleMotorEncoder.setPosition(0);
-        intakeSpinMotorEncoder.setPosition(0);
+        com.revrobotics.spark.config.SparkMaxConfig angleConfig = new com.revrobotics.spark.config.SparkMaxConfig();
+        
+        angleConfig.closedLoop
+            .feedbackSensor(com.revrobotics.spark.FeedbackSensor.kAbsoluteEncoder)
+            .p(0.01) // Set your PID gains here
+            .i(0.0)
+            .d(0.0);
+
+        // Apply settings
+        intakeAngleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     // set intake speed
@@ -44,8 +57,20 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // zero velocity
     public void zeroVelocity() {
-        intakeAngleMotor.setControl(m_velocityControl.withVelocity(0));
-        intakeSpinMotor.setControl(m_velocityControl.withVelocity(0));
+        intakeAngleMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
+        intakeSpinMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
+    }
+
+    public void setIntakeAngle(double degrees){
+        double gearRatio = Constants.intakeConstants.intakeAngleMotorRatio; // FIX 
+
+        // 2. Convert Degrees to Rotations
+        // (Degrees / 360) gives you the fraction of a circle
+        double rotations = (degrees / 360.0) * gearRatio;
+
+        // 3. Send to the SparkMax PID Controller
+        // ControlType.kPosition tells the SparkMax to go to a specific spot and stay there
+        intakeAngleMotorPID.setSetpoint(rotations, SparkMax.ControlType.kPosition);
     }
     
     // start intake
