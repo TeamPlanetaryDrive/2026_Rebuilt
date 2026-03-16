@@ -54,22 +54,22 @@ public final class Constants {
     //     public static final int intakePivotCANID = 1;
     //     public static final int intakeSpinCANID = 2;
     // }
-    public static final class shooterConstants{
-        public static final int shooter1CANID = 1; // NEEDS TO BE FIXED
-        public static final int shooter2CANID = 2; // NEEDS TO BE FIXED
-        public static final int shooter3CANID = 3; // NEEDS TO BE FIXED
+    public static final class shooterConstants {
+        public static final int shooter1CANID = 20; 
+        public static final int shooter2CANID = 21; 
+        public static final int shooter3CANID = 23; 
         public static final int shooter1Encoder = 4; // NEEDS TO BE FIXED
         public static final int shooter2Encoder = 5; // NEEDS TO BE FIXED
         public static final int shooter3Encoder = 6; // NEEDS TO BE FIXED
 
     }
 
-    public static final class feederConstants{
+    public static final class feederConstants {
         public static final int feederLeadCANID = 1; // NEEDS TO BE FIXED
         public static final int feederFollowCANID = 2; // NEEDS TO BE FIXED
     }
 
-    public static final class intakeConstants{
+    public static final class intakeConstants {
         public static final int intakeAngleMotorCANID = 1; // NEEDS TO BE FIXED
         public static final int intakeSpinMotorCANID = 2; // NEEDS TO BE FIXED
         public static final int intakeAngleMotorEncoder = 3; // NEEDS TO BE FIXED

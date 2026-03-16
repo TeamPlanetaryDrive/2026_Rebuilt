@@ -164,8 +164,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void start() {
-        setAllShooterSpeeds(1000);
-        setLeaderFeederSpeed(1000);
+        setAllShooterSpeeds(100);
+        setLeaderFeederSpeed(100);
     }
 
     public void stop() {
