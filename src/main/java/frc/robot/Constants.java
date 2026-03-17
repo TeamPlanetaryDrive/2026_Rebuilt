@@ -58,26 +58,26 @@ public final class Constants {
         public static final int shooter1CANID = 20; 
         public static final int shooter2CANID = 21; 
         public static final int shooter3CANID = 23; 
-        public static final int shooter1Encoder = 4; // NEEDS TO BE FIXED
-        public static final int shooter2Encoder = 5; // NEEDS TO BE FIXED
-        public static final int shooter3Encoder = 6; // NEEDS TO BE FIXED
-
+        // public static final int shooter1Encoder = 4; // NEEDS TO BE FIXED
+        // public static final int shooter2Encoder = 5; // NEEDS TO BE FIXED
+        // public static final int shooter3Encoder = 6; // NEEDS TO BE FIXED
+        // Commented out since unsure if that was needed
     }
 
     public static final class feederConstants {
-        public static final int feederLeadCANID = 1; // NEEDS TO BE FIXED
-        public static final int feederFollowCANID = 2; // NEEDS TO BE FIXED
+        public static final int feederLeadCANID = 40; // NEEDS TO BE FIXED
+        public static final int feederFollowCANID = 41; // NEEDS TO BE FIXED
     }
 
     public static final class intakeConstants {
-        public static final int intakeAngleMotorCANID = 1; // NEEDS TO BE FIXED
-        public static final int intakeSpinMotorCANID = 2; // NEEDS TO BE FIXED
-        public static final int intakeAngleMotorEncoder = 3; // NEEDS TO BE FIXED
-        public static final int intakeSpinMotorEncoder = 4; // NEEDS TO BE FIXED
-        public static final int intakeAngleMotorPID = 5; // NEEDS TO BE FIXED
-        public static final int intakeSpinMotorPID = 6; // NEEDS TO BE FIXED
+        public static final int intakeAngleMotorCANID = 42; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorCANID = 43; // NEEDS TO BE FIXED
+        public static final int intakeAngleMotorEncoder = 44; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorEncoder = 45; // NEEDS TO BE FIXED
+        public static final int intakeAngleMotorPID = 46; // NEEDS TO BE FIXED
+        public static final int intakeSpinMotorPID = 47; // NEEDS TO BE FIXED
 
-        public static final double intakeAngleMotorRatio = 0;
+        public static final double intakeAngleMotorRatio = 1; // Changed from 0
 
     }
 

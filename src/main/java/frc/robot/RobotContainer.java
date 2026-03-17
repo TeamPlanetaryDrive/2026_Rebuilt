@@ -30,6 +30,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
 import frc.robot.subsystems.bot.ShooterSubsystem;
+import frc.robot.subsystems.bot.AbsoluteIntakeSubsystem;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -37,6 +39,8 @@ import frc.robot.subsystems.bot.ShooterSubsystem;
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
+
+
 public class RobotContainer {
 
   // The robot's subsystems
@@ -44,11 +48,16 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000", m_robotDrive);
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  private final AbsoluteIntakeSubsystem m_intake = new AbsoluteIntakeSubsystem();
   // private final ArmSubsystem m_arm = new ArmSubsystem(); 
   // private final ClawSpinSubsystem m_clawSpinner = new ClawSpinSubsystem();
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  private final SlewRateLimiter m_xLimiter = new SlewRateLimiter(3.0);
+  private final SlewRateLimiter m_yLimiter = new SlewRateLimiter(3.0);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3.0);
   
   //private final TrajectoryFollowerBuilder follower = new TrajectoryFollowerBuilder(m_robotDrive, m_photonVision, m_robotDrive::getPose);
 
@@ -75,9 +84,9 @@ public class RobotContainer {
       // Turning is controlled by the X axis of the right stick.
       new RunCommand(
         () -> m_robotDrive.drive(
-          -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-          -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-          -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+          m_xLimiter.calculate(-MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)),
+          m_yLimiter.calculate(-MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)),
+          m_rotLimiter.calculate(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)),
            true),
         m_robotDrive
       )
@@ -136,6 +145,10 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .onTrue(m_shooter.runOnce(() -> m_shooter.start()))
         .onFalse(m_shooter.runOnce(() -> m_shooter.stop()));
+
+    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+        .onTrue(m_intake.runOnce(() -> m_intake.start()))
+        .onFalse(m_intake.runOnce(() -> m_intake.stop()));
 
     
   }
