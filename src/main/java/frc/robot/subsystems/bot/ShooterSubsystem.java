@@ -1,6 +1,5 @@
 package frc.robot.subsystems.bot;
 
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
@@ -9,6 +8,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -33,27 +33,21 @@ public class ShooterSubsystem extends SubsystemBase {
     private final TalonFX shooter1;
     private final TalonFX shooter2;
     private final TalonFX shooter3;
-    private final SparkClosedLoopController feederLeadPID;
-    private final SparkClosedLoopController feederFollowPID;
-    // private final SparkClosedLoopController shooter3PID;
-    // private final RelativeEncoder shooter1Encoder;
-    // private final RelativeEncoder shooter2Encoder;
-    // private final RelativeEncoder shooter3Encoder;
     private final SparkMax feederLeadMotor;
     private final SparkMax feederFollowMotor;
     private final RelativeEncoder feederLeadEncoder;
     private final RelativeEncoder feederFollowEncoder;
+    private final SparkClosedLoopController feederLeadPID;
+    private final SparkClosedLoopController feederFollowPID;
+    private final SparkMaxConfig feederLeadConfig;
+    private final SparkMaxConfig feederFollowConfig;
 
     private final VelocityVoltage m_velocityControl = new VelocityVoltage(0);
-
-
-
 
     public ShooterSubsystem() {
         this.shooter1 = new TalonFX(Constants.shooterConstants.shooter1CANID);
         this.shooter2 = new TalonFX(Constants.shooterConstants.shooter2CANID);
         this.shooter3 = new TalonFX(Constants.shooterConstants.shooter3CANID);
-
 
         configureShooterMotor(shooter1);
         configureShooterMotor(shooter2);    
@@ -62,12 +56,21 @@ public class ShooterSubsystem extends SubsystemBase {
         this.feederLeadMotor = new SparkMax(Constants.feederConstants.feederLeadCANID, SparkLowLevel.MotorType.kBrushless);
         this.feederFollowMotor = new SparkMax(Constants.feederConstants.feederFollowCANID, SparkLowLevel.MotorType.kBrushless);
 
+        this.feederLeadConfig = new SparkMaxConfig();
+        feederLeadConfig.closedLoop
+            .p(0.0001)
+            .i(0)
+            .d(0);
+        this.feederFollowConfig = new SparkMaxConfig();
+        feederFollowConfig.follow(feederLeadMotor, true);
+        feederLeadMotor.configure(feederLeadConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        feederFollowMotor.configure(feederFollowConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
         this.feederLeadEncoder = feederLeadMotor.getEncoder();
         this.feederFollowEncoder = feederFollowMotor.getEncoder();
 
         this.feederLeadPID = feederLeadMotor.getClosedLoopController();
         this.feederFollowPID = feederFollowMotor.getClosedLoopController();
-        
     }
 
     // set single shooter speed
@@ -91,14 +94,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // set single feeder speed
     // follower follows leader motor speed
-    public void setLeaderFeederSpeed(double radiansPerSecond) {
+    public void setFeederSpeed(double radiansPerSecond) {
         double rotationsPerSecond = radiansPerSecond / (2 * Math.PI);
         double targetRPM = rotationsPerSecond * 60;
 
         // 2. Use the Lead PID controller to set the velocity
         // ControlType.kVelocity tells the motor to use its internal PID
         feederLeadPID.setSetpoint(targetRPM, SparkMax.ControlType.kVelocity);
-        feederFollowPID.setSetpoint(targetRPM, SparkMax.ControlType.kVelocity);
     }
 
     // get single shooter speed
@@ -111,7 +113,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // get leader feeder speed
-    public double getLeaderFeederSpeed() {
+    public double getFeederSpeed() {
         // SparkMax encoders return Rotations per Minute (RPM) by default
         // double rpm = feederLeadEncoder.getPositionVertical(); // Use getVelocity() in older APIs
         // In the latest REVLib:
@@ -123,7 +125,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private void configureShooterMotor(TalonFX motor){
         final TalonFXConfiguration config = new TalonFXConfiguration()
-        .withMotorOutput(
+            .withMotorOutput(
                 new MotorOutputConfigs()
                     //.withInverted(invertDirection)
                     .withNeutralMode(NeutralModeValue.Coast)
@@ -134,17 +136,15 @@ public class ShooterSubsystem extends SubsystemBase {
             )
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
-                    // .withStatorCurrentLimit(Amps.of(120))
-                    // .withStatorCurrentLimitEnable(true)
-                    // .withSupplyCurrentLimit(Amps.of(70))
-                    // .withSupplyCurrentLimitEnable(true)
+                    .withStatorCurrentLimit(80)
+                    .withStatorCurrentLimitEnable(true)
+                    .withSupplyCurrentLimit(40)
+                    .withSupplyCurrentLimitEnable(true)
             )
             .withSlot0(
                 new Slot0Configs()
-                    .withKP(0.5)
-                    .withKI(2)
-                    .withKD(0)
-                    .withKV(0.0018)  
+                    .withKP(0.1)
+                    .withKV(0.12)  
             );
         motor.getConfigurator().apply(config);
     }
@@ -154,28 +154,18 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shooter1 Speed", getSingleShooterSpeed(shooter1));
         SmartDashboard.putNumber("Shooter2 Speed", getSingleShooterSpeed(shooter2));
         SmartDashboard.putNumber("Shooter3 Speed", getSingleShooterSpeed(shooter3));
-        SmartDashboard.putNumber("Leader Feeder Speed", getLeaderFeederSpeed());
-        SmartDashboard.putNumber("Follower Feeder Speed", getLeaderFeederSpeed());
+        SmartDashboard.putNumber("Feeder Speed", getFeederSpeed());
     }
 
-    public void zeroVelocity() {
+    public void stop() {
         shooter1.setControl(m_velocityControl.withVelocity(0));
         shooter2.setControl(m_velocityControl.withVelocity(0));
         shooter3.setControl(m_velocityControl.withVelocity(0));
         feederLeadPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
-        feederFollowPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
     }
 
     public void start() {
         setAllShooterSpeeds(100);
-        setLeaderFeederSpeed(100);
+        setFeederSpeed(100);
     }
-
-    public void stop() {
-        zeroVelocity();
-    }
-
-
-
-
 }
