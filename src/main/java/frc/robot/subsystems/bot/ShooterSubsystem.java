@@ -1,16 +1,13 @@
 package frc.robot.subsystems.bot;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -20,15 +17,9 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
-import com.ctre.phoenix6.controls.VelocityVoltage;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Configs;
 import frc.robot.Constants;
-
-import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final TalonFX shooter1;
@@ -37,9 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkMax feederLeadMotor;
     private final SparkMax feederFollowMotor;
     private final RelativeEncoder feederLeadEncoder;
-    private final RelativeEncoder feederFollowEncoder;
     private final SparkClosedLoopController feederLeadPID;
-    private final SparkClosedLoopController feederFollowPID;
     private SparkMaxConfig feederLeadConfig;
     private SparkMaxConfig feederFollowConfig;
 
@@ -64,6 +53,9 @@ public class ShooterSubsystem extends SubsystemBase {
             .p(0.0001)
             .i(0)
             .d(0);
+        feederLeadConfig.encoder
+            .positionConversionFactor(360 / (2)) // not actual ratio
+            .velocityConversionFactor(360 / (2) / 60); // not actual ratio 
         feederLeadConfig.smartCurrentLimit(40);
         feederFollowConfig.smartCurrentLimit(40);
         feederLeadConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
@@ -71,12 +63,9 @@ public class ShooterSubsystem extends SubsystemBase {
         feederFollowConfig.follow(feederLeadMotor, true);
         feederLeadMotor.configure(feederLeadConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         feederFollowMotor.configure(feederFollowConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+    
         this.feederLeadEncoder = feederLeadMotor.getEncoder();
-        this.feederFollowEncoder = feederFollowMotor.getEncoder();
-
         this.feederLeadPID = feederLeadMotor.getClosedLoopController();
-        this.feederFollowPID = feederFollowMotor.getClosedLoopController();
     }
 
     // set single shooter speed
@@ -152,6 +141,8 @@ public class ShooterSubsystem extends SubsystemBase {
                     .withKP(0.1)
                     .withKV(0.12)  
             );
+
+        config.Feedback.SensorToMechanismRatio = 1; // not actual ratio - to fix
         motor.getConfigurator().apply(config);
     }
 

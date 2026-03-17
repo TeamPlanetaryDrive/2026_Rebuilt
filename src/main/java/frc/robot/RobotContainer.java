@@ -31,6 +31,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
 import frc.robot.subsystems.bot.ShooterSubsystem;
 import frc.robot.subsystems.bot.AbsoluteIntakeSubsystem;
+import frc.robot.subsystems.bot.RelativeIntakeSubsystem;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 
 /*
@@ -48,7 +49,8 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000", m_robotDrive);
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
-  private final AbsoluteIntakeSubsystem m_intake = new AbsoluteIntakeSubsystem();
+  private final RelativeIntakeSubsystem m_intake = new RelativeIntakeSubsystem();
+  // private final AbsoluteIntakeSubsystem m_intake = new AbsoluteIntakeSubsystem();
   // private final ArmSubsystem m_arm = new ArmSubsystem(); 
   // private final ClawSpinSubsystem m_clawSpinner = new ClawSpinSubsystem();
 
@@ -73,7 +75,6 @@ public class RobotContainer {
 
     configureDashboard();
     configureButtonBindings();
-    //configureDashboard();
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -91,16 +92,6 @@ public class RobotContainer {
         m_robotDrive
       )
     );
-
-    // m_clawSpinner.setDefaultCommand(
-    //   new RunCommand(
-    //     () -> m_clawSpinner.spinClaw(
-    //       MathUtil.applyDeadband(m_driverController.getLeftTriggerAxis() - m_driverController.getRightTriggerAxis(), OIConstants.kDriveDeadband)
-    //     ),
-    //     m_clawSpinner
-    //   )
-    // );
-    
   }
 
   // driver tab

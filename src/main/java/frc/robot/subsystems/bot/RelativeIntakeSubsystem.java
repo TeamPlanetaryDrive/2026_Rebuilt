@@ -48,10 +48,18 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
             .i(0, ClosedLoopSlot.kSlot1)
             .d(0, ClosedLoopSlot.kSlot1);
         
+        angleMotorConfig.encoder
+            .positionConversionFactor(360 / 75) // check ratio
+            .velocityConversionFactor(360 / 75 / 60); // check ratio
+
         spinMotorConfig.closedLoop
             .p(0.001)
             .i(0)
             .d(0);
+
+        spinMotorConfig.encoder
+            .positionConversionFactor(360 / 2) // check ratio
+            .velocityConversionFactor(360 / 2 / 60); // check ratio 
 
         angleMotorConfig.smartCurrentLimit(40);
         spinMotorConfig.smartCurrentLimit(40);
