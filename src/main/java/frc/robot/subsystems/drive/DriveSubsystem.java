@@ -51,8 +51,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.utils.Constants.AutoConstants;
+import frc.robot.utils.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules

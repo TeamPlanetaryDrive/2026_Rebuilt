@@ -14,10 +14,10 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
+import frc.robot.utils.Constants.AutoConstants;
+import frc.robot.utils.Constants.DriveConstants;
 
 public class TrajectoryFollowerBuilder {
     private final ProfiledPIDController thetaController;
@@ -61,9 +61,18 @@ public class TrajectoryFollowerBuilder {
         double distance;
         //redo for small code statement
         String currentLevel = SmartDashboard.getString("CURRENT SETPOINT", "L4");
+        // contains loop for boolean
+        String[] arr = new String[]{"INTAKE", "CLIMB", "L1", "L2", "L3", "L4"};
+        boolean contains = false;
+        for (String s : arr) {
+            if (s.equals(currentLevel)) {
+                contains = true;
+                break;
+            }
+        }
         if (currentLevel.equals("INTAKE")) {
             distance = .2413;
-        } else if(UtilityMethods.contains( new String[]{"CLIMB", "L1", "L2", "L3", "L4"}, currentLevel)) {
+        } else if(contains) {
             distance = .25;
         } else {
             return null;

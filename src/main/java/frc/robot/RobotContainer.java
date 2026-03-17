@@ -6,9 +6,8 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -17,22 +16,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.OIConstants;
-// jacoby is awesome
-// import frc.robot.commands.arm.ArmCommand;
-// import frc.robot.commands.arm.PivotUpDown;
-// import frc.robot.commands.arm.ResetClaw;
-// import frc.robot.commands.auto.AlignToL3;
-// import frc.robot.commands.auto.OutakeClaw;
-// import frc.robot.commands.auto.ToL3;
-// import frc.robot.subsystems.bot.ArmSubsystem;
-// import frc.robot.subsystems.bot.ClawSpinSubsystem;
+import frc.robot.subsystems.bot.RelativeIntakeSubsystem;
+import frc.robot.subsystems.bot.ShooterSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
-import frc.robot.subsystems.bot.ShooterSubsystem;
-import frc.robot.subsystems.bot.AbsoluteIntakeSubsystem;
-import frc.robot.subsystems.bot.RelativeIntakeSubsystem;
-import edu.wpi.first.math.filter.SlewRateLimiter;
+import frc.robot.utils.Constants.OIConstants;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a

@@ -1,15 +1,14 @@
-package frc.robot;
+package frc.robot.utils;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import frc.robot.utils.Constants.AutoConstants;
+import frc.robot.utils.Constants.DriveConstants;
+import frc.robot.utils.Constants.ModuleConstants;
 
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
     public static final class ArmSubsystem {

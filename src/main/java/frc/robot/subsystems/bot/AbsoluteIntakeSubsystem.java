@@ -1,14 +1,15 @@
 package frc.robot.subsystems.bot;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.ControlType;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
-import frc.robot.Constants;
-import com.revrobotics.ResetMode;
-import com.revrobotics.PersistMode;
+import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Constants;
 
 public class AbsoluteIntakeSubsystem extends SubsystemBase {
     private SparkMax intakeAngleMotor;

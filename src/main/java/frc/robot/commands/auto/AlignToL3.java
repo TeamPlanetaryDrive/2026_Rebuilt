@@ -12,10 +12,10 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
+import frc.robot.utils.Constants.AutoConstants;
+import frc.robot.utils.Constants.DriveConstants;
 
 public class AlignToL3 extends Command{
     DriveSubsystem drive;
