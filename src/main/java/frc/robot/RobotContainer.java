@@ -98,10 +98,10 @@ public class RobotContainer {
   private void configureDashboard() {
     var driverTab = Shuffleboard.getTab("Driver");
 
-    UsbCamera cam = CameraServer.startAutomaticCapture();
-    cam.setResolution(1920, 1080);
-    cam.setFPS(45);
-    driverTab.add(cam);
+    // UsbCamera cam = CameraServer.startAutomaticCapture();
+    // cam.setResolution(1920, 1080);
+    // cam.setFPS(45);
+    // driverTab.add(cam);
     
 // Creates the 
   }

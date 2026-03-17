@@ -152,6 +152,13 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shooter2 Speed", getSingleShooterSpeed(shooter2));
         SmartDashboard.putNumber("Shooter3 Speed", getSingleShooterSpeed(shooter3));
         SmartDashboard.putNumber("Feeder Speed", getFeederSpeed());
+
+        SmartDashboard.putNumber("Shooter1 Temp C", shooter1.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter2 Temp C", shooter2.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter3 Temp C", shooter3.getDeviceTemp().getValueAsDouble());
+
+        SmartDashboard.putNumber("Feeder Lead Temp C", feederLeadMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Feeder Follow Temp C", feederFollowMotor.getMotorTemperature());
     }
 
     public void stop() {

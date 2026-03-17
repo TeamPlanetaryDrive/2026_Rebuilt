@@ -3,6 +3,8 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.ControlType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.PersistMode;
@@ -108,5 +110,11 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
     public void stop() {
         intakeAngleMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
         intakeSpinMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
+    }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("Intake Angle Temp C", intakeAngleMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Intake Spin Temp C", intakeSpinMotor.getMotorTemperature());
     }
 }
