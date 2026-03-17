@@ -77,7 +77,7 @@ public class AbsoluteIntakeSubsystem extends SubsystemBase {
     // relative intake assumes start angle is at maximum angle
     // 0 angle is the angle we need (???)
     public void start() {
-        setIntakeSpeed(1000);
+        setIntakeSpeed(50);
         setIntakeAngle(140);
     }
     public void stop() {
