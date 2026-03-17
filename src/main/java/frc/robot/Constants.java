@@ -57,7 +57,7 @@ public final class Constants {
     public static final class shooterConstants {
         public static final int shooter1CANID = 20; 
         public static final int shooter2CANID = 21; 
-        public static final int shooter3CANID = 23; 
+        public static final int shooter3CANID = 22; 
         // public static final int shooter1Encoder = 4; // NEEDS TO BE FIXED
         // public static final int shooter2Encoder = 5; // NEEDS TO BE FIXED
         // public static final int shooter3Encoder = 6; // NEEDS TO BE FIXED
