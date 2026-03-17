@@ -16,13 +16,13 @@ public final class Constants {
     }
 
     public static final class feederConstants {
-        public static final int feederLeadCANID = 40; // NEEDS TO BE FIXED
-        public static final int feederFollowCANID = 41; // NEEDS TO BE FIXED
+        public static final int feederLeadCANID = 2; // Make sure they are correct order
+        public static final int feederFollowCANID = 18; 
     }
 
     public static final class intakeConstants {
-        public static final int intakeAngleMotorCANID = 42; // NEEDS TO BE FIXED
-        public static final int intakeSpinMotorCANID = 43; // NEEDS TO BE FIXED
+        public static final int intakeAngleMotorCANID = 3; 
+        public static final int intakeSpinMotorCANID = 5;
 
         public static final double intakeAngleMotorRatio = 1; // Changed from 0
 

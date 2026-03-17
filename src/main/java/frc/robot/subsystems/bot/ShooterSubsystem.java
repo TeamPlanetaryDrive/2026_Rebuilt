@@ -169,7 +169,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void start() {
-        setAllShooterSpeeds(100);
-        setFeederSpeed(100);
+        setAllShooterSpeeds(2000);
+        setFeederSpeed(2000);
     }
 }

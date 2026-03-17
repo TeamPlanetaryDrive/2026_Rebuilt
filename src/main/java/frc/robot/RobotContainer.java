@@ -141,6 +141,13 @@ public class RobotContainer {
         .onTrue(m_intake.runOnce(() -> m_intake.start()))
         .onFalse(m_intake.runOnce(() -> m_intake.stop()));
 
+    // Move intake to a specific angle when 'A' is pressed
+    new JoystickButton(m_driverController, Button.kA.value)
+        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(90))); // Change 90 to your desired angle!
+
+    // Bring intake back to 0 degrees when 'B' is pressed
+    new JoystickButton(m_driverController, Button.kB.value)
+        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(0)));
     
   }
 

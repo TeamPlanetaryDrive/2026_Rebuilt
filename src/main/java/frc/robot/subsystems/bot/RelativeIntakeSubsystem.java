@@ -51,8 +51,8 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
             .d(0, ClosedLoopSlot.kSlot1);
         
         angleMotorConfig.encoder
-            .positionConversionFactor(360 / 75) // check ratio
-            .velocityConversionFactor(360 / 75 / 60); // check ratio
+            .positionConversionFactor(360.0 / 75.0) // check ratio
+            .velocityConversionFactor(360.0 / 75.0 / 60.0); // check ratio
 
         spinMotorConfig.closedLoop
             .p(0.001)
@@ -60,14 +60,17 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
             .d(0);
 
         spinMotorConfig.encoder
-            .positionConversionFactor(360 / 2) // check ratio
-            .velocityConversionFactor(360 / 2 / 60); // check ratio 
+            .positionConversionFactor(360.0 / 2.0) // check ratio
+            .velocityConversionFactor(360.0 / 2.0 / 60.0); // check ratio 
 
         angleMotorConfig.smartCurrentLimit(40);
         spinMotorConfig.smartCurrentLimit(40);
 
         angleMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
         spinMotorConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
+
+        // Making moters move the correct way:
+        spinMotorConfig.inverted(true);
 
         intakeSpinMotor.configure(spinMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         intakeAngleMotor.configure(angleMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -108,7 +111,7 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        intakeAngleMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
+        // intakeAngleMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
         intakeSpinMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
     }
 
