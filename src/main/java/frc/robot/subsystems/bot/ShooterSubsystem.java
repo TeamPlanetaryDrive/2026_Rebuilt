@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -57,11 +58,16 @@ public class ShooterSubsystem extends SubsystemBase {
         this.feederFollowMotor = new SparkMax(Constants.feederConstants.feederFollowCANID, SparkLowLevel.MotorType.kBrushless);
 
         this.feederLeadConfig = new SparkMaxConfig();
+        this.feederFollowConfig = new SparkMaxConfig();
+
         feederLeadConfig.closedLoop
             .p(0.0001)
             .i(0)
             .d(0);
-        this.feederFollowConfig = new SparkMaxConfig();
+        feederLeadConfig.smartCurrentLimit(40);
+        feederFollowConfig.smartCurrentLimit(40);
+        feederLeadConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
+        feederFollowConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
         feederFollowConfig.follow(feederLeadMotor, true);
         feederLeadMotor.configure(feederLeadConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         feederFollowMotor.configure(feederFollowConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
