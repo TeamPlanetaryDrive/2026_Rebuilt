@@ -141,14 +141,11 @@ public class RobotContainer {
         .onTrue(m_intake.runOnce(() -> m_intake.start()))
         .onFalse(m_intake.runOnce(() -> m_intake.stop()));
 
-    // Move intake to a specific angle when 'A' is pressed
+    // Hold A to raise the feeder, release A to lower it back to 0
     new JoystickButton(m_driverController, Button.kA.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(90))); // Change 90 to your desired angle!
-
-    // Bring intake back to 0 degrees when 'B' is pressed
-    new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(0)));
-    
+        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(140)))  // Goes up when pressed
+        .onFalse(m_intake.runOnce(() -> m_intake.setIntakeAngle(0)));  // Goes down when released
+        
   }
 
   public Command getAutonomousCommand() {

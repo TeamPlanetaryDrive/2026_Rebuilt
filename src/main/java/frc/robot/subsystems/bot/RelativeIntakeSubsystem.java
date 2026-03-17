@@ -82,42 +82,38 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
     // set intake speed
     public void setIntakeSpeed(double radiansPerSecond){
         double rpm = 60 * radiansPerSecond / (2 * Math.PI);
-        intakeSpinMotorPID.setSetpoint(rpm, ControlType.kVelocity);
+        // CHANGED: Use setReference and force Slot 0
+        intakeSpinMotorPID.setReference(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
     public void setRotateSpeed(double radiansPerSecond){
         double rpm = 60 * radiansPerSecond / (2 * Math.PI);
-        intakeAngleMotorPID.setSetpoint(rpm, ControlType.kVelocity);
+        // CHANGED: Use setReference and force Slot 0
+        intakeAngleMotorPID.setReference(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
     public void setIntakeAngle(double degrees){
-        double gearRatio = Constants.intakeConstants.intakeAngleMotorRatio; // FIX 
-
-        // 2. Convert Degrees to Rotations
-        // (Degrees / 360) gives you the fraction of a circle
-        double rotations = (degrees / 360.0) * gearRatio;
-
-        // 3. Send to the SparkMax PID Controller
-        // ControlType.kPosition tells the SparkMax to go to a specific spot and stay there
-        intakeAngleMotorPID.setSetpoint(rotations, SparkMax.ControlType.kPosition);
+        // CHANGED: Removed the extra math, and forced it to use Slot 1
+        intakeAngleMotorPID.setReference(degrees, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
     
     // start intake
-    // relative intake assumes start angle is at maximum angle
-    // 0 angle is the angle we need (???)
     public void start() {
         setIntakeSpeed(1000);
-        setIntakeAngle(140);
+        // CHANGED: Removed setIntakeAngle so this method ONLY spins the rollers
     }
 
     public void stop() {
-        // intakeAngleMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
-        intakeSpinMotorPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
+        // CHANGED: Use setReference and force Slot 0
+        intakeSpinMotorPID.setReference(0, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
     @Override
     public void periodic(){
         SmartDashboard.putNumber("Intake Angle Temp C", intakeAngleMotor.getMotorTemperature());
         SmartDashboard.putNumber("Intake Spin Temp C", intakeSpinMotor.getMotorTemperature());
+        
+        // ADDED: Lets you see exactly what angle the arm thinks it is at!
+        SmartDashboard.putNumber("Current Intake Angle", intakeAngleMotorEncoder.getPosition());
     }
 }
