@@ -40,8 +40,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private final RelativeEncoder feederFollowEncoder;
     private final SparkClosedLoopController feederLeadPID;
     private final SparkClosedLoopController feederFollowPID;
-    private final SparkMaxConfig feederLeadConfig;
-    private final SparkMaxConfig feederFollowConfig;
+    private SparkMaxConfig feederLeadConfig;
+    private SparkMaxConfig feederFollowConfig;
 
     private final VelocityVoltage m_velocityControl = new VelocityVoltage(0);
 
