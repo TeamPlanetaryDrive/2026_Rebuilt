@@ -1,5 +1,13 @@
 package frc.robot.subsystems.bot;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -9,14 +17,6 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.VoltageConfigs;
-import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -58,8 +58,8 @@ public class ShooterSubsystem extends SubsystemBase {
         feederLeadConfig.encoder
             .positionConversionFactor(360.0 / (2)); // not actual ratio
             // .velocityConversionFactor(360.0 / (2) / 60); // not actual ratio 
-        feederLeadConfig.smartCurrentLimit(40);
-        feederFollowConfig.smartCurrentLimit(40);
+        feederLeadConfig.smartCurrentLimit(60); //changed
+        feederFollowConfig.smartCurrentLimit(60); //changed
         feederLeadConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
         feederFollowConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
         feederFollowConfig.follow(feederLeadMotor, true);
@@ -95,9 +95,8 @@ public class ShooterSubsystem extends SubsystemBase {
         double rotationsPerSecond = radiansPerSecond / (2 * Math.PI);
         double targetRPM = rotationsPerSecond * 60;
 
-        // 2. Use the Lead PID controller to set the velocity
-        // ControlType.kVelocity tells the motor to use its internal PID
-        feederLeadPID.setSetpoint(targetRPM, SparkMax.ControlType.kVelocity);
+        // CHANGED: Use setReference and assign it to Slot 0
+        feederLeadPID.setReference(targetRPM, SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
     // get single shooter speed
