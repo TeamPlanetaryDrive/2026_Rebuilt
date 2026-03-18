@@ -6,6 +6,7 @@ package frc.robot.subsystems.drive;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.json.simple.parser.ParseException;
 import org.photonvision.EstimatedRobotPose;
@@ -106,7 +107,7 @@ public class DriveSubsystem extends SubsystemBase {
     try {
         layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2026RebuiltAndymark.m_resourceFile);
         // set the field layout origin based on the alliance color
-        var alliance = DriverStation.getAlliance();
+        Optional<Alliance> alliance = DriverStation.getAlliance();
           if (alliance.isPresent() && alliance.get() == Alliance.Red) {
               layout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
           } else {
@@ -144,7 +145,7 @@ public class DriveSubsystem extends SubsystemBase {
             ),
             config, // The robot configuration
             () -> {
-              var alliance = DriverStation.getAlliance();
+              Optional<Alliance> alliance = DriverStation.getAlliance();
               if (alliance.isPresent()) {
                 return alliance.get() == DriverStation.Alliance.Red;
               }
@@ -192,7 +193,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   private String getFormattedPose() {
-    var pose = getPose();
+    Pose2d pose = getPose();
     return String.format("(%.2f, %.2f) %.2f degrees", 
       pose.getX(), 
       pose.getY(),
@@ -330,7 +331,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Command getSwerveControllerCommand(Trajectory trajectory) {
-    var thetaController = new ProfiledPIDController(
+    ProfiledPIDController thetaController = new ProfiledPIDController(
       AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints
     );
     thetaController.enableContinuousInput(-Math.PI, Math.PI);

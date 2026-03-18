@@ -15,14 +15,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
 public class RelativeIntakeSubsystem extends SubsystemBase {
-    private SparkMax intakeAngleMotor;
-    private SparkMax intakeSpinMotor;
-    private RelativeEncoder intakeAngleMotorEncoder;
-    private RelativeEncoder intakeSpinMotorEncoder;
-    private SparkClosedLoopController intakeAngleMotorPID;
-    private SparkClosedLoopController intakeSpinMotorPID;
-    private SparkMaxConfig angleMotorConfig; 
-    private SparkMaxConfig spinMotorConfig; 
+    private final SparkMax intakeAngleMotor;
+    private final SparkMax intakeSpinMotor;
+    private final RelativeEncoder intakeAngleMotorEncoder;
+    private final RelativeEncoder intakeSpinMotorEncoder;
+    private final SparkClosedLoopController intakeAngleMotorPID;
+    private final SparkClosedLoopController intakeSpinMotorPID;
+    private final SparkMaxConfig angleMotorConfig; 
+    private final SparkMaxConfig spinMotorConfig; 
 
     // intake motors
     // using relative encoders
@@ -37,8 +37,8 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
         spinMotorConfig = new SparkMaxConfig();
         config();
     }
-
-    public void config() {
+    
+    public final void config() {
         angleMotorConfig.closedLoop
             // slot 0 - kVelocity
             .p(0.001, ClosedLoopSlot.kSlot0)
@@ -81,19 +81,19 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
     // set intake speed
     public void setIntakeSpeed(double radiansPerSecond){
         double rpm = 60 * radiansPerSecond / (2 * Math.PI);
-        // CHANGED: Use setReference and force Slot 0
-        intakeSpinMotorPID.setReference(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+        // CHANGED: Use setSetpoint and force Slot 0
+        intakeSpinMotorPID.setSetpoint(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
     public void setRotateSpeed(double radiansPerSecond){
         double rpm = 60 * radiansPerSecond / (2 * Math.PI);
-        // CHANGED: Use setReference and force Slot 0
-        intakeAngleMotorPID.setReference(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+        // CHANGED: Use setSetpoint and force Slot 0
+        intakeAngleMotorPID.setSetpoint(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
     public void setIntakeAngle(double degrees){
         // CHANGED: Removed the extra math, and forced it to use Slot 1
-        intakeAngleMotorPID.setReference(degrees, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        intakeAngleMotorPID.setSetpoint(degrees, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
     
     // start intake
@@ -103,8 +103,8 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        // CHANGED: Use setReference and force Slot 0
-        intakeSpinMotorPID.setReference(0, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+        // CHANGED: Use setSetpoint and force Slot 0
+        intakeSpinMotorPID.setSetpoint(0, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
     @Override

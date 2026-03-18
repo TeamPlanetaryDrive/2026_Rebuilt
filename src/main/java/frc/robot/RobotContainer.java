@@ -10,7 +10,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,8 +18,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.bot.RelativeIntakeSubsystem;
 import frc.robot.subsystems.bot.ShooterSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.subsystems.vision.PhotonVision;
 import frc.robot.utils.Constants.OIConstants;
+// import frc.robot.subsystems.vision.PhotonVision;
+// not used
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -35,7 +35,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final SendableChooser<Command> autoChooser;
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000", m_robotDrive);
+  // private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000", m_robotDrive);
+  // m_photonVision is never read.
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final RelativeIntakeSubsystem m_intake = new RelativeIntakeSubsystem();
   // private final AbsoluteIntakeSubsystem m_intake = new AbsoluteIntakeSubsystem();
@@ -84,8 +85,9 @@ public class RobotContainer {
 
   // driver tab
   private void configureDashboard() {
-    var driverTab = Shuffleboard.getTab("Driver");
-
+    // ShuffleboardTab driverTab = Shuffleboard.getTab("Driver");
+    // driverTab is not used
+    
     // UsbCamera cam = CameraServer.startAutomaticCapture();
     // cam.setResolution(1920, 1080);
     // cam.setFPS(45);

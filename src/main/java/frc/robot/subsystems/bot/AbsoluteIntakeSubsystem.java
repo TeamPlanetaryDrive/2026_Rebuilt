@@ -12,28 +12,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
 public class AbsoluteIntakeSubsystem extends SubsystemBase {
-    private SparkMax intakeAngleMotor;
-    private SparkMax intakeSpinMotor;
-    private AbsoluteEncoder intakeAngleMotorEncoder;
-    private RelativeEncoder intakeSpinMotorEncoder;
-    private SparkClosedLoopController intakeAngleMotorPID;
-    private SparkClosedLoopController intakeSpinMotorPID;
+    private final SparkMax intakeAngleMotor;
+    private final SparkMax intakeSpinMotor;
+    private final AbsoluteEncoder intakeAngleMotorEncoder;
+    private final RelativeEncoder intakeSpinMotorEncoder;
+    private final SparkClosedLoopController intakeAngleMotorPID;
+    private final SparkClosedLoopController intakeSpinMotorPID;
 
 
     // intake motors
     // using relative encoders
     public AbsoluteIntakeSubsystem(){
-        intakeAngleMotor = new SparkMax(Constants.intakeConstants.intakeAngleMotorCANID, SparkLowLevel.MotorType.kBrushless);
-        intakeSpinMotor = new SparkMax(Constants.intakeConstants.intakeSpinMotorCANID, SparkLowLevel.MotorType.kBrushless);
-        intakeAngleMotorEncoder = intakeAngleMotor.getAbsoluteEncoder();
-        intakeSpinMotorEncoder = intakeSpinMotor.getEncoder();
-        intakeAngleMotorPID = intakeAngleMotor.getClosedLoopController();
-        intakeSpinMotorPID = intakeSpinMotor.getClosedLoopController();
+        this.intakeAngleMotor = new SparkMax(Constants.intakeConstants.intakeAngleMotorCANID, SparkLowLevel.MotorType.kBrushless);
+        this.intakeSpinMotor = new SparkMax(Constants.intakeConstants.intakeSpinMotorCANID, SparkLowLevel.MotorType.kBrushless);
+        this.intakeAngleMotorEncoder = intakeAngleMotor.getAbsoluteEncoder();
+        this.intakeSpinMotorEncoder = intakeSpinMotor.getEncoder();
+        this.intakeAngleMotorPID = intakeAngleMotor.getClosedLoopController();
+        this.intakeSpinMotorPID = intakeSpinMotor.getClosedLoopController();
 
         configEncoders();
     }
 
-    public void configEncoders() {
+    public final void configEncoders() {
         com.revrobotics.spark.config.SparkMaxConfig angleConfig = new com.revrobotics.spark.config.SparkMaxConfig();
         
         angleConfig.closedLoop
