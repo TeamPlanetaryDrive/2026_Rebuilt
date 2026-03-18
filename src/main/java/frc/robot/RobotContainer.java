@@ -145,7 +145,7 @@ public class RobotContainer {
                 }, m_shooter),
 
                 // 2. Wait exactly 0.25 seconds to let the wheels spin up
-                Commands.waitSeconds(0.25),
+                Commands.waitSeconds(0.50),
 
                 // 3. Ram the feeder forward to fire the ball
                 Commands.runOnce(() -> m_shooter.feedForward(), m_shooter)
