@@ -56,8 +56,8 @@ public class ShooterSubsystem extends SubsystemBase {
         feederLeadConfig.encoder
             .positionConversionFactor(360.0 / (2)) // not actual ratio
             .velocityConversionFactor(360.0 / (2) / 60); // not actual ratio 
-        feederLeadConfig.smartCurrentLimit(40);
-        feederFollowConfig.smartCurrentLimit(40);
+        feederLeadConfig.smartCurrentLimit(60);
+        feederFollowConfig.smartCurrentLimit(60);
         feederLeadConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
         feederFollowConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
         feederFollowConfig.follow(feederLeadMotor, true);
