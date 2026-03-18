@@ -3,6 +3,7 @@ package frc.robot.subsystems.bot;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
@@ -50,12 +51,13 @@ public class ShooterSubsystem extends SubsystemBase {
         this.feederFollowConfig = new SparkMaxConfig();
 
         feederLeadConfig.closedLoop
+            .velocityFF(1.0 / 5676.0)
             .p(0.0001)
             .i(0)
             .d(0);
         feederLeadConfig.encoder
-            .positionConversionFactor(360.0 / (2)) // not actual ratio
-            .velocityConversionFactor(360.0 / (2) / 60); // not actual ratio 
+            .positionConversionFactor(360.0 / (2)); // not actual ratio
+            // .velocityConversionFactor(360.0 / (2) / 60); // not actual ratio 
         feederLeadConfig.smartCurrentLimit(40);
         feederFollowConfig.smartCurrentLimit(40);
         feederLeadConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
@@ -165,11 +167,11 @@ public class ShooterSubsystem extends SubsystemBase {
         shooter1.setControl(m_velocityControl.withVelocity(0));
         shooter2.setControl(m_velocityControl.withVelocity(0));
         shooter3.setControl(m_velocityControl.withVelocity(0));
-        feederLeadPID.setSetpoint(0, SparkMax.ControlType.kVelocity);
+        feederLeadPID.setReference(0, SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
     public void start() {
-        setAllShooterSpeeds(2000);
-        setFeederSpeed(2000);
+        setAllShooterSpeeds(500);
+        setFeederSpeed(250);
     }
 }

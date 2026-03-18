@@ -61,7 +61,7 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
 
         spinMotorConfig.encoder
             .positionConversionFactor(360.0 / 2.0) // check ratio
-            .velocityConversionFactor(360.0 / 2.0 / 60.0); // check ratio 
+            .velocityConversionFactor(360.0 / 2.0 / 600); // check ratio 
 
         angleMotorConfig.smartCurrentLimit(40);
         spinMotorConfig.smartCurrentLimit(40);
@@ -71,6 +71,7 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
 
         // Making moters move the correct way:
         spinMotorConfig.inverted(true);
+        angleMotorConfig.inverted(true);
 
         intakeSpinMotor.configure(spinMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         intakeAngleMotor.configure(angleMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

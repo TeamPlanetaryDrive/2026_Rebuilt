@@ -141,11 +141,11 @@ public class RobotContainer {
         .onTrue(m_intake.runOnce(() -> m_intake.start()))
         .onFalse(m_intake.runOnce(() -> m_intake.stop()));
 
-    // Hold A to raise the feeder, release A to lower it back to 0
+    // Hold A to raise the feeder, release A to lower it back to 0 (FIX THIS SO IT DOES NOT GO SO FAST+GET ENCODER)
     new JoystickButton(m_driverController, Button.kA.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(140)))  // Goes up when pressed
+        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(90)))  // Goes up when pressed
         .onFalse(m_intake.runOnce(() -> m_intake.setIntakeAngle(0)));  // Goes down when released
-        
+
   }
 
   public Command getAutonomousCommand() {
