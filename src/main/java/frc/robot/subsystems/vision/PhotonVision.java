@@ -12,7 +12,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.subsystems.drive.DriveSubsystem; 
@@ -46,6 +51,48 @@ public class PhotonVision extends SubsystemBase {
         }
         
     }
+
+    public void update(){
+        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+        for (PhotonPipelineResult result : results){
+            if (!result.hasTargets()){
+                continue;
+            }
+            Optional<EstimatedRobotPose> estimate = poseEstimator.estimateCoprocMultiTagPose(result);
+            if (estimate.isEmpty()) {
+                estimate = poseEstimator.estimateLowestAmbiguityPose(result);
+            }
+
+            if (estimate.isEmpty()) {
+                continue;
+            }
+
+            this.m_driveSubsystem.m_poseEstimator.addVisionMeasurement(
+                estimate.get().estimatedPose.toPose2d(),
+                estimate.get().timestampSeconds,
+                getVisionStdDevs(result));
+        }
+    }
+
+    private Matrix<N3, N1> getVisionStdDevs(PhotonPipelineResult result) {
+    // Very simple placeholder heuristic. Tune on your robot.
+    int tagCount = result.getTargets().size();
+    double bestTagDistanceMeters =
+        result.getBestTarget().getBestCameraToTarget().getTranslation().getNorm();
+
+    if (tagCount >= 2) {
+      // Multi-tag: trust more
+      return VecBuilder.fill(0.20, 0.20, Units.degreesToRadians(8.0));
+    }
+
+    if (bestTagDistanceMeters < 2.5) {
+      // One close tag: medium trust
+      return VecBuilder.fill(0.45, 0.45, Units.degreesToRadians(20.0));
+    }
+
+    // One far tag: low trust
+    return VecBuilder.fill(1.50, 1.50, Units.degreesToRadians(999.0));
+  }
 
     public PhotonCamera getCamera() {
         return camera;

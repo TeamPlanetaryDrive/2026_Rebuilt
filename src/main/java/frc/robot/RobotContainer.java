@@ -46,8 +46,8 @@ public class RobotContainer {
 
   // The robot's subsystems
   private final SendableChooser<Command> autoChooser;
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000", m_robotDrive);
+  private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000");
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_photonVision);
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final RelativeIntakeSubsystem m_intake = new RelativeIntakeSubsystem();
   // private final AbsoluteIntakeSubsystem m_intake = new AbsoluteIntakeSubsystem();
@@ -145,7 +145,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kA.value)
         .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(90)))  // Goes up when pressed
         .onFalse(m_intake.runOnce(() -> m_intake.setIntakeAngle(0)));  // Goes down when released
-
+  
   }
 
   public Command getAutonomousCommand() {

@@ -87,7 +87,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, 0, new Rotation2d(0)));
 
-  SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
+  public SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
     DriveConstants.kDriveKinematics,
     Rotation2d.fromDegrees(getAngle()),
     new SwerveModulePosition[] {
