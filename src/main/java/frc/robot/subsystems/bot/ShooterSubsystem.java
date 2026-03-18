@@ -169,8 +169,18 @@ public class ShooterSubsystem extends SubsystemBase {
         feederLeadPID.setReference(0, SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
-    public void start() {
-        setAllShooterSpeeds(500);
-        setFeederSpeed(250);
+    // 1. Spin up just the shooter wheels
+    public void startShooter() {
+        setAllShooterSpeeds(500); 
+    }
+
+    // 2. Run the feeder forward to shoot
+    public void feedForward() {
+        setFeederSpeed(250); 
+    }
+
+    // 3. Run the feeder backward to un-jam / get a running start
+    public void feedBackward() {
+        setFeederSpeed(-100); // Negative speed to pull the ball away from the wheels
     }
 }

@@ -48,7 +48,9 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
             // slot 1 - kPosition
             .p(0.1, ClosedLoopSlot.kSlot1)
             .i(0, ClosedLoopSlot.kSlot1)
-            .d(0, ClosedLoopSlot.kSlot1);
+            .d(0, ClosedLoopSlot.kSlot1)
+            // make the motor less violent
+            .outputRange(-0.3, 0.3, ClosedLoopSlot.kSlot1);
         
         angleMotorConfig.encoder
             .positionConversionFactor(360.0 / 75.0) // check ratio
@@ -100,7 +102,7 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
     
     // start intake
     public void start() {
-        setIntakeSpeed(1000);
+        setIntakeSpeed(200);
         // CHANGED: Removed setIntakeAngle so this method ONLY spins the rollers
     }
 
