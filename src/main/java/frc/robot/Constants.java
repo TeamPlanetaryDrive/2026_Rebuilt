@@ -9,50 +9,23 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-    /* TECHNICALLY, these all need getters, but that would genuinely just
-    overcomplicate things, because getClimbAngle() is just longer than climbAngle.
-    This is also technically a data leak/lack of encapsulation, but again, I think
-    having getters for everything would be over the top and decrease readibility.
-    */
-    public static final class ArmConstants {
-        public static final double beginningArmPosition = -23;
-        public static final double beginningClawPosition = -15;
-
-        public static final int armExtendCANID = 1; 
-        public static final int armPivotRCANID = 2; 
-        public static final int armPivotLCANID = 3; 
-        public static final int clawPivotCANID = 4;
-        public static final int clawSpinCANID = 5; 
-
-        // rotations to cm
-        public static final double armExtensionConversionFactor = 5.793103448;
-
-        public static final double intakeAngle = 52;  // deg
-        public static final double l1Angle = 45; 
-        public static final double l2Angle = 55; 
-        public static final double l3Angle = 72; 
-        public static final double l4Angle = 72; 
-        public static final double climbAngle = 80;
-
-        public static final double intakeExtension = 1.25;  // in
-        public static final double l1Extension = 4; 
-        public static final double l2Extension = 12; 
-        public static final double l3Extension = 14; 
-        public static final double l4Extension = 43.5; 
-        public static final double climbExtension = 0;
-
-        public static final double intakeClawAngle = -15;
-        public static final double l1ClawAngle = -45;
-        public static final double l2ClawAngle = -65;
-        public static final double l3ClawAngle = -85;
-        public static final double l4ClawAngle = -85;
-        public static final double climbClawAngle = 0;
-
-        public static final double intakePercent = .8;
+    public static final class shooterConstants {
+        public static final int shooter1CANID = 20; 
+        public static final int shooter2CANID = 21; 
+        public static final int shooter3CANID = 22; 
     }
-    public static final class intakeConstants{
-        public static final int intakePivotCANID = 1;
-        public static final int intakeSpinCANID = 2;
+
+    public static final class feederConstants {
+        public static final int feederLeadCANID = 2; // Make sure they are correct order
+        public static final int feederFollowCANID = 18; 
+    }
+
+    public static final class intakeConstants {
+        public static final int intakeAngleMotorCANID = 3; 
+        public static final int intakeSpinMotorCANID = 5;
+
+        public static final double intakeAngleMotorRatio = 1; // Changed from 0
+
     }
     public static final class shooterConstants{
         public static final int shooter1CANID = 1; // NEEDS TO BE FIXED

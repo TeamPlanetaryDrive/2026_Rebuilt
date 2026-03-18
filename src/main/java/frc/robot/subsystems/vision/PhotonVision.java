@@ -40,32 +40,6 @@ public class PhotonVision extends SubsystemBase {
             result = temp.get(temp.size()-1);
             if(result.hasTargets())
             {
-                /* TODO: Figure out how to update() without deprecated method. We can probably use these but I don't know the exacts:
-                .estimatePnpDistanceTrigSolvePose(PhotonPipelineResult cameraResult)
-                .estimateConstrainedSolvepnpPose(
-                                                PhotonPipelineResult cameraResult,
-                                                Matrix<N3,N3> cameraMatrix,
-                                                Matrix<N8,N1> distCoeffs,
-                                                Pose3d seedPose,
-                                                boolean headingFree,
-                                                double headingScaleFactor)
-                .estimateCoprocMultiTagPose(PhotonPipelineResult cameraResult)
-                .estimateRioMultiTagPose(
-                                        PhotonPipelineResult cameraResult,
-                                        Matrix<N3,N3> cameraMatrix,
-                                        Matrix<N8,N1> distCoeffs)
-                .estimateLowestAmbiguityPose(PhotonPipelineResult cameraResult)
-                .estimateClosestToCameraHeightPose(PhotonPipelineResult cameraResult)
-                .estimateClosestToReferencePose(
-                                                PhotonPipelineResult cameraResult,
-                                                Pose3d referencePose)
-                .estimateAverageBestTargetsPose(PhotonPipelineResult cameraResult)
-                .estimatePnpDistanceTrigSolvePose(PhotonPipelineResult cameraResult)
-                .estimateRioMultiTagPose(
-                                        PhotonPipelineResult cameraResult,
-                                        Matrix<N3,N3> cameraMatrix,
-                                        Matrix<N8,N1> distCoeffs)
-                */
                 pose = poseEstimator.update(result);
                 m_driveSubsystem.addVision(pose.get());
             } 

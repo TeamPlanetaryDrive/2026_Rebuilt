@@ -107,8 +107,11 @@ public class DriveSubsystem extends SubsystemBase {
         layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2026RebuiltAndymark.m_resourceFile);
         // set the field layout origin based on the alliance color
         var alliance = DriverStation.getAlliance();
-        layout.setOrigin(alliance.get() == Alliance.Blue ?
-            OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
+          if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+              layout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
+          } else {
+              layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+          }
     } catch (IOException e) {
         DriverStation.reportError("failed to load april tag field layout", e.getStackTrace());
     }
@@ -148,7 +151,6 @@ public class DriveSubsystem extends SubsystemBase {
               return false;
             }//,
             //this // Reference to this subsystem to set requirements
-            //TODO: With "this" comment, does something break?
     );
   }
 

@@ -39,10 +39,10 @@ public final class Configs {
                 .outputRange(-0.1, 0.1)
                 .positionWrappingEnabled(true).positionWrappingInputRange(0, 360);
                 
-            pivotLConfig
-                .idleMode(IdleMode.kBrake)
-                .smartCurrentLimit(40)
-                .follow(Constants.ArmConstants.armPivotRCANID, true);
+            // pivotLConfig
+            //     .idleMode(IdleMode.kBrake)
+            //     .smartCurrentLimit(40)
+            //     .follow(Constants.ArmConstants.armPivotRCANID, true);
 
             clawPivotConfig
                 .idleMode(IdleMode.kBrake)
