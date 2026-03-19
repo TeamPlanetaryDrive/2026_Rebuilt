@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -22,6 +23,9 @@ public class MAXSwerveModule {
   private final SparkMax m_drivingSpark;
   private final SparkMax m_turningSpark;
 
+  private SparkMaxConfig driving_config;
+  private SparkMaxConfig turning_config;
+  
   private final RelativeEncoder m_drivingEncoder;
   private final AbsoluteEncoder m_turningEncoder;
 
@@ -40,10 +44,16 @@ public class MAXSwerveModule {
   public MAXSwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
     m_drivingSpark = new SparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSpark = new SparkMax(turningCANId, MotorType.kBrushless);
+    driving_config = new SparkMaxConfig();
+    turning_config = new SparkMaxConfig();
+    driving_config.smartCurrentLimit(40);
+    turning_config.smartCurrentLimit(40);
+    m_drivingSpark.configure(driving_config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    m_turningSpark.configure(turning_config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
     m_drivingEncoder = m_drivingSpark.getEncoder();
     m_turningEncoder = m_turningSpark.getAbsoluteEncoder();
-
+    
     m_drivingClosedLoopController = m_drivingSpark.getClosedLoopController();
     m_turningClosedLoopController = m_turningSpark.getClosedLoopController();
 
