@@ -27,30 +27,6 @@ public final class Constants {
         public static final double intakeAngleMotorRatio = 1; // Changed from 0
 
     }
-    public static final class shooterConstants{
-        public static final int shooter1CANID = 1; // NEEDS TO BE FIXED
-        public static final int shooter2CANID = 2; // NEEDS TO BE FIXED
-        public static final int shooter3CANID = 3; // NEEDS TO BE FIXED
-        public static final int shooter1Encoder = 4; // NEEDS TO BE FIXED
-        public static final int shooter2Encoder = 5; // NEEDS TO BE FIXED
-        public static final int shooter3Encoder = 6; // NEEDS TO BE FIXED
-
-    }
-
-    public static final class feederConstants{
-        public static final int feederLeadCANID = 1; // NEEDS TO BE FIXED
-        public static final int feederFollowCANID = 2; // NEEDS TO BE FIXED
-    }
-
-    public static final class intakeConstants{
-        public static final int intakeAngleMotorCANID = 1; // NEEDS TO BE FIXED
-        public static final int intakeSpinMotorCANID = 2; // NEEDS TO BE FIXED
-        public static final int intakeAngleMotorEncoder = 3; // NEEDS TO BE FIXED
-        public static final int intakeSpinMotorEncoder = 4; // NEEDS TO BE FIXED
-        public static final int intakeAngleMotorPID = 5; // NEEDS TO BE FIXED
-        public static final int intakeSpinMotorPID = 6; // NEEDS TO BE FIXED
-
-    }
 
     public static final class PhotonVisionConstants {
 
@@ -160,5 +136,4 @@ public final class Constants {
         public static final double kFreeSpeedRpm = 5676;
     }
 
-    // public static final class AutoConstants {}
 }
