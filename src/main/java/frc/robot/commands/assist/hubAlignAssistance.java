@@ -20,14 +20,14 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class hubAlignAssistance extends Command {
+public class HubAlignAssistance extends Command {
     private final DriveSubsystem drive;
     private final PhotonVision vision;
     private final PIDController distancePid;
 
     private double lastValidTagTime = -1.0;
 
-    public hubAlignAssistance(DriveSubsystem drive, PhotonVision vision) {
+    public HubAlignAssistance(DriveSubsystem drive, PhotonVision vision) {
         this.drive = drive;
         this.vision = vision;
 
