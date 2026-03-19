@@ -12,7 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
@@ -21,6 +21,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -76,14 +77,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // set single shooter speed
-    public void setSingleShooterSpeed(TalonFX shooter, double radiansPerSecond) {
+    public void setSingleShooterSpeed(TalonFX shooterPID, double radiansPerSecond) {
         // Convert Radians per Second to Rotations per Second for Phoenix 6
-
-        // 2. Convert Radians/s to Rotations/s
         double rotationsPerSecond = radiansPerSecond / (2 * Math.PI);
 
-        // 3. Apply the control to the motor
-        shooter.setControl(m_velocityControl.withVelocity(rotationsPerSecond));
+        shooterPID.setControl(m_velocityControl.withVelocity(rotationsPerSecond));
 
     }
 
@@ -105,51 +103,13 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // get single shooter speed
-    public double getSingleShooterSpeed(TalonFX shooter) {
-        // Returns the velocity in Rotations per Second
-        double rps = shooter.getVelocity().getValueAsDouble();
-        
-        // To return Radians per Second:
-        return rps * (2 * Math.PI);
+    public double getSingleShooterSpeed(TalonFX shooterPID) {
+        return shooterPID.getControlVoltage();
     }
 
     // get leader feeder speed
-    public double getFeederSpeed() {
-        // SparkMax encoders return Rotations per Minute (RPM) by default
-        // double rpm = feederLeadEncoder.getPositionVertical(); // Use getVelocity() in older APIs
-        // In the latest REVLib:
-        double velocityRPM = feederLeadEncoder.getVelocity();
-        
-        // To return Radians per Second:
-        return (velocityRPM / 60.0) * (2 * Math.PI);
-    }
-
-    private void configureShooterMotor(TalonFX motor){
-        final TalonFXConfiguration config = new TalonFXConfiguration()
-            .withMotorOutput(
-                new MotorOutputConfigs()
-                    //.withInverted(invertDirection)
-                    .withNeutralMode(NeutralModeValue.Coast)
-            )
-            .withVoltage(
-                new VoltageConfigs()
-                    // .withPeakReverseVoltage(Volts.of(0))
-            )
-            .withCurrentLimits(
-                new CurrentLimitsConfigs()
-                    .withStatorCurrentLimit(80)
-                    .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(40)
-                    .withSupplyCurrentLimitEnable(true)
-            )
-            .withSlot0(
-                new Slot0Configs()
-                    .withKP(0.1)
-                    .withKV(0.12)  
-            );
-
-        config.Feedback.SensorToMechanismRatio = 1; // not actual ratio - to fix
-        motor.getConfigurator().apply(config);
+    public double getLeaderFeederSpeed(SparkMax feederPID) {
+        return feederPID.getControlVoltage();
     }
 
     @Override
@@ -157,14 +117,8 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shooter1 Speed", getSingleShooterSpeed(shooter1));
         SmartDashboard.putNumber("Shooter2 Speed", getSingleShooterSpeed(shooter2));
         SmartDashboard.putNumber("Shooter3 Speed", getSingleShooterSpeed(shooter3));
-        SmartDashboard.putNumber("Feeder Speed", getFeederSpeed());
-
-        SmartDashboard.putNumber("Shooter1 Temp C", shooter1.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter2 Temp C", shooter2.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter3 Temp C", shooter3.getDeviceTemp().getValueAsDouble());
-
-        SmartDashboard.putNumber("Feeder Lead Temp C", feederLeadMotor.getMotorTemperature());
-        SmartDashboard.putNumber("Feeder Follow Temp C", feederFollowMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Leader Feeder Speed", getLeaderFeederSpeed(feederLeadMotor));
+        SmartDashboard.putNumber("Follower Feeder Speed", getFollowerFeederSpeed(feederFollowMotor));
     }
 
     public void stop() {
