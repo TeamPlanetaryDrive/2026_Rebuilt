@@ -23,15 +23,13 @@ import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.subsystems.drive.DriveSubsystem; 
 
 public class PhotonVision extends SubsystemBase {
-    private final DriveSubsystem m_driveSubsystem; 
     private final PhotonCamera camera; 
     private final AprilTagFieldLayout layout; 
     private final PhotonPoseEstimator poseEstimator;
     private PhotonPipelineResult result;
     private Optional<EstimatedRobotPose> pose;
 
-    public PhotonVision(String cameraName, DriveSubsystem drive){
-        m_driveSubsystem = drive; 
+    public PhotonVision(String cameraName){
         camera = new PhotonCamera(cameraName);
         layout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
         poseEstimator = new PhotonPoseEstimator(layout, PhotonVisionConstants.transform);
@@ -40,19 +38,19 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        List<PhotonPipelineResult> temp = camera.getAllUnreadResults();
-        if(!temp.isEmpty()) {
-            result = temp.get(temp.size()-1);
-            if(result.hasTargets())
-            {
-                pose = poseEstimator.update(result);
-                m_driveSubsystem.addVision(pose.get());
-            } 
-        }
-        
+        // List<PhotonPipelineResult> temp = camera.getAllUnreadResults();
+        // if(!temp.isEmpty()) {
+        //     result = temp.get(temp.size()-1);
+        //     if(result.hasTargets())
+        //     {
+        //         pose = poseEstimator.update(result);
+        //         m_driveSubsystem.addVision(pose.get());
+        //     } 
+        // }
+        return;
     }
 
-    public void update(){
+    public void update(DriveSubsystem drive){
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
         for (PhotonPipelineResult result : results){
             if (!result.hasTargets()){
@@ -67,7 +65,7 @@ public class PhotonVision extends SubsystemBase {
                 continue;
             }
 
-            this.m_driveSubsystem.m_poseEstimator.addVisionMeasurement(
+            drive.m_poseEstimator.addVisionMeasurement(
                 estimate.get().estimatedPose.toPose2d(),
                 estimate.get().timestampSeconds,
                 getVisionStdDevs(result));
