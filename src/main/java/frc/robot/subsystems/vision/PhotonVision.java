@@ -92,14 +92,15 @@ public class PhotonVision extends SubsystemBase {
             
             SmartDashboard.putNumber("Vision Timestamp", est.timestampSeconds);
             SmartDashboard.putNumber("FPGA Timestamp", edu.wpi.first.wpilibj.Timer.getFPGATimestamp());
-
-            SmartDashboard.putNumber("Estimator X Before", drive.getPose().getX());
-            SmartDashboard.putNumber("Estimator Y Before", drive.getPose().getY());
             
             SmartDashboard.putNumber("Vision X", est.estimatedPose.getX());
             SmartDashboard.putNumber("Vision Y", est.estimatedPose.getY());
             
         }
+    }
+
+    public void hubDistanceAssist(){
+        
     }
 
     private Matrix<N3, N1> getVisionStdDevs(PhotonPipelineResult result) {
