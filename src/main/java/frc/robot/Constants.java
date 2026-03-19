@@ -1,14 +1,15 @@
 package frc.robot;
 
+import com.pathplanner.lib.path.PathConstraints;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
-
-import com.pathplanner.lib.path.PathConstraints;
 
 public final class Constants {
     public static final class shooterConstants {
@@ -35,14 +36,14 @@ public final class Constants {
         public static final int[] redCoralReefIds = {6, 7, 8, 9, 10, 11}; 
         public static final int[] blueCoralReefIds = {17, 18, 19, 20, 21, 22}; 
 
-        public static final double offsetXMeters = 0.30226;
-        public static final double offsetYMeters = 0.3429;
-        public static final double offsetZMeters = .2286;
-        public static final double rotationXMeters = 0;
-        public static final double rotationYMeters = 0;
-        public static final double rotationZMeters = 0;
+        public static final double offsetXMeters = -0.13335;
+        public static final double offsetYMeters = -0.288925;
+        public static final double offsetZMeters = 0.47625;
+        public static final double rotationXRadians = 0;
+        public static final double rotationYRadians = 0.441;
+        public static final double rotationZRadians = 0;
         public static final Transform3d transform = new Transform3d(new Translation3d(offsetXMeters, offsetYMeters, offsetZMeters),
-                                                                    new Rotation3d(rotationXMeters, rotationYMeters, rotationZMeters));
+                                                                    new Rotation3d(rotationXRadians, rotationYRadians, rotationZRadians));
     }
     
     public static final class DriveConstants {
@@ -85,7 +86,20 @@ public final class Constants {
         public static final int kRearRightTurningCanId = 13;
 
         public static final boolean kGyroReversed = true;
+
+        public static final PathConstraints kApproachConstraints = new PathConstraints(1.0, 1.0, 180, 180);
     }
+
+    // public static final class AutoConstants {
+    //     public static final double kMoveBackDistance = 2.0; //meters
+    //     public static final double kMaxSpeedMetersPerSecond = 1.0; //meters
+    //     public static final double kMaxAccelerationMetersPerSecondSquared = 1.0;
+    //     public static final double kPThetaController = 0.001;
+    //     public static final Constraints kThetaControllerConstraints = new Constraints(kMaxSpeedMetersPerSecond, kMaxAccelerationMetersPerSecondSquared);
+    //     public static final double kPXController = 0.01;
+    //     public static final double kPYController = 0.01;
+
+    // }
 
     public static final class ModuleConstants {
         // The MAXSwerve module can be configured with one of three pinion gears: 12T,
@@ -119,6 +133,7 @@ public final class Constants {
 
     public static final class AutoConstants {
         // acceleration and angular per second
+        public static final double kMoveBackDistance = 2.0; //meters
         public static final double kMaxSpeedMetersPerSecond = 1;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;

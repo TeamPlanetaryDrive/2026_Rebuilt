@@ -57,11 +57,14 @@ public class PhotonVision extends SubsystemBase {
 
     public void update(DriveSubsystem drive){
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+        SmartDashboard.putNumber("results length:" , results.size());
         for (PhotonPipelineResult result : results){
             // Skip if no targets
             if (!result.hasTargets()){
+                SmartDashboard.putBoolean("Nothing is running!!!", true);
                 continue;
             }
+            SmartDashboard.putBoolean("Nothing is running!!!", false);
             
             // try to get an estimate
             Optional<EstimatedRobotPose> estimate = poseEstimator.estimateCoprocMultiTagPose(result);
