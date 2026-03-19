@@ -15,6 +15,9 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
@@ -51,8 +54,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.vision.PhotonVision;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -87,7 +92,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   private SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, 0, new Rotation2d(0)));
 
-  SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
+  private PhotonVision vision;
+
+  public SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
     DriveConstants.kDriveKinematics,
     Rotation2d.fromDegrees(getAngle()),
     new SwerveModulePosition[] {
@@ -102,7 +109,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   @SuppressWarnings("CallToPrintStackTrace")
-  public DriveSubsystem() {
+  public DriveSubsystem(PhotonVision vision) {
+    this.vision = vision;
     SmartDashboard.putData("Field", field2d);
     AprilTagFieldLayout layout;
     try {
@@ -172,13 +180,81 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
 
+    this.vision.update(this);
+    field2d.setRobotPose(getPose());
     Pose2d pose = m_poseEstimator.getEstimatedPosition();
     field2d.setRobotPose(pose);
     SmartDashboard.putNumber("Robot X", pose.getX());
     SmartDashboard.putNumber("Robot Y", pose.getY());
     SmartDashboard.putNumber("Robot Heading Deg", pose.getRotation().getDegrees());
   }
+// =============
+  public void startGoToOnRadius(Translation2d target, double radiusMeters) {
+    Pose2d currentPose = getPose();
+    Pose2d goalPose = computeNearestPoseOnRadius(currentPose, target, radiusMeters);
 
+    // Already basically at the nearest point on the radius
+    if (currentPose.getTranslation().getDistance(goalPose.getTranslation()) < 0.03) {
+      return;
+    }
+
+    PathPlannerPath path = buildStraightLinePath(currentPose, goalPose);
+    AutoBuilder.followPath(path).schedule();
+  }
+
+  public static Pose2d computeNearestPoseOnRadius(
+    Pose2d robotPose, Translation2d target, double radiusMeters) {
+
+    Translation2d robot = robotPose.getTranslation();
+    Translation2d delta = robot.minus(target);
+    double dist = delta.getNorm();
+
+    Translation2d unitDirection;
+
+    if (dist > 1e-6) {
+      unitDirection = new Translation2d(delta.getX() / dist, delta.getY() / dist);
+    } else {
+      // No unique nearest point if robot is exactly at the center.
+      // Pick current heading direction as a deterministic fallback.
+      unitDirection =
+          new Translation2d(
+              robotPose.getRotation().getCos(),
+              robotPose.getRotation().getSin());
+    }
+
+    Translation2d goalTranslation = target.plus(unitDirection.times(radiusMeters));
+
+    // Face the center target when you arrive
+    Rotation2d goalHolonomicRotation = target.minus(goalTranslation).getAngle();
+
+    return new Pose2d(goalTranslation, goalHolonomicRotation);
+  }
+
+  private PathPlannerPath buildStraightLinePath(Pose2d startPose, Pose2d goalPose) {
+    Translation2d delta = goalPose.getTranslation().minus(startPose.getTranslation());
+    Rotation2d travelDirection = delta.getAngle();
+
+    // These rotations are path direction, not robot holonomic heading
+    List<Waypoint> waypoints =
+        PathPlannerPath.waypointsFromPoses(
+            new Pose2d(startPose.getTranslation(), travelDirection),
+            new Pose2d(goalPose.getTranslation(), travelDirection));
+
+    PathPlannerPath path =
+        new PathPlannerPath(
+            waypoints,
+            Constants.Drive.kApproachConstraints,
+            null,
+            new GoalEndState(
+                0.0,
+                goalPose.getRotation()));
+
+    // Runtime field coordinates are already correct
+    path.preventFlipping = true;
+
+    return path;
+  }
+// ==============
   public SwerveModulePosition[] getModulePosition() {
     return new SwerveModulePosition[] {
           m_frontLeft.getPosition(),

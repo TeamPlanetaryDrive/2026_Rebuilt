@@ -8,6 +8,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
+import com.pathplanner.lib.path.PathConstraints;
+
 public final class Constants {
     public static final class shooterConstants {
         public static final int shooter1CANID = 20; 
