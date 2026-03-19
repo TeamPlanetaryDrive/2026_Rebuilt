@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 //import org.photonvision.PhotonPoseEstimator.PoseStrategy; not used
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -32,7 +33,7 @@ public class PhotonVision extends SubsystemBase {
     public PhotonVision(String cameraName){
         camera = new PhotonCamera(cameraName);
         layout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
-        poseEstimator = new PhotonPoseEstimator(layout, PhotonVisionConstants.transform);
+        poseEstimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, PhotonVisionConstants.transform);
         //PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, was in between layout and PhotoVisionConstants.transform
     }
 
