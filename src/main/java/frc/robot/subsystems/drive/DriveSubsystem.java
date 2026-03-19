@@ -106,25 +106,22 @@ public class DriveSubsystem extends SubsystemBase {
     stateStdDevs,
     visionMeasurementStdDevs
   );
+  public AprilTagFieldLayout layout;
 
   /** Creates a new DriveSubsystem. */
   @SuppressWarnings("CallToPrintStackTrace")
   public DriveSubsystem(PhotonVision vision) {
     this.vision = vision;
     SmartDashboard.putData("Field", field2d);
-    AprilTagFieldLayout layout;
-    try {
-        layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2026RebuiltAndymark.m_resourceFile);
-        // set the field layout origin based on the alliance color
-        var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-              layout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
-          } else {
-              layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
-          }
-    } catch (IOException e) {
-        DriverStation.reportError("failed to load april tag field layout", e.getStackTrace());
-    }
+    this.layout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
+    // set the field layout origin based on the alliance color
+    var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+          this.layout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
+      } else {
+          this.layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+      }
+
     ShuffleboardTab tab = Shuffleboard.getTab("Vision");
     
     tab.addString("Pose", this::getFormattedPose).withPosition(0, 0).withSize(2, 0);
@@ -154,7 +151,6 @@ public class DriveSubsystem extends SubsystemBase {
             ),
             config, // The robot configuration
             () -> {
-              var alliance = DriverStation.getAlliance();
               if (alliance.isPresent()) {
                 return alliance.get() == DriverStation.Alliance.Red;
               }
