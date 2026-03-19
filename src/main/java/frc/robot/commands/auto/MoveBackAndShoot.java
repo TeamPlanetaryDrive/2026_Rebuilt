@@ -74,9 +74,10 @@ public class MoveBackAndShoot extends Command {
                 shooter.startShooter();
                 shooter.feedBackward();
             }, shooter),
+            
+            Commands.waitSeconds(0.5),
+            Commands.runOnce(shooter::feedForward, shooter)
 
-            Commands.runOnce(shooter::feedForward, shooter),
-            Commands.waitSeconds(0.5)
 
         );
 
