@@ -15,15 +15,15 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PhotonVision extends SubsystemBase {
     private final PhotonCamera camera; 
@@ -89,6 +89,12 @@ public class PhotonVision extends SubsystemBase {
                 est.estimatedPose.toPose2d(),
                 est.timestampSeconds,
                 stdDevs);
+            
+            SmartDashboard.putNumber("Vision Timestamp", est.timestampSeconds);
+            SmartDashboard.putNumber("FPGA Timestamp", edu.wpi.first.wpilibj.Timer.getFPGATimestamp());
+
+            SmartDashboard.putNumber("Estimator X Before", drive.getPose().getX());
+            SmartDashboard.putNumber("Estimator Y Before", drive.getPose().getY());
             
             SmartDashboard.putNumber("Vision X", est.estimatedPose.getX());
             SmartDashboard.putNumber("Vision Y", est.estimatedPose.getY());
