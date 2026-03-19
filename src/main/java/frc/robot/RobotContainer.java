@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.auto.MoveBackAndShoot;
 // jacoby is awesome
 // import frc.robot.commands.arm.ArmCommand;
 // import frc.robot.commands.arm.PivotUpDown;
@@ -48,7 +49,7 @@ public class RobotContainer {
 
   // The robot's subsystems
   private final SendableChooser<Command> autoChooser;
-  private final PhotonVision m_photonVision = new PhotonVision("Microsoft_LifeCam_HD-3000");
+  private final PhotonVision m_photonVision = new PhotonVision(Constants.OIConstants.cameraName);
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_photonVision);
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final RelativeIntakeSubsystem m_intake = new RelativeIntakeSubsystem();
@@ -167,6 +168,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return new MoveBackAndShoot(m_robotDrive, m_shooter);
+    // return autoChooser.getSelected();
   }
 }

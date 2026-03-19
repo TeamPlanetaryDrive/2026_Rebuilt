@@ -107,6 +107,7 @@ public final class Constants {
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
         public static final double kDriveDeadband = 0.1;
+        public static final String cameraName = "camera1";
     }
 
     public static final class VisionConstants {
@@ -119,7 +120,8 @@ public final class Constants {
 
     public static final class AutoConstants {
         // acceleration and angular per second
-        public static final double kMaxSpeedMetersPerSecond = 1;
+        public static final double kMoveBackDistance = 2.5; //meters
+        public static final double kMaxSpeedMetersPerSecond = 1.2; //updated from 1.0
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
