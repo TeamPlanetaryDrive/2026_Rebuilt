@@ -21,7 +21,9 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PhotonVisionConstants;
-import frc.robot.subsystems.drive.DriveSubsystem; 
+import frc.robot.subsystems.drive.DriveSubsystem;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PhotonVision extends SubsystemBase {
     private final PhotonCamera camera; 
@@ -52,26 +54,45 @@ public class PhotonVision extends SubsystemBase {
     }
 
 
-    
+
     public void update(DriveSubsystem drive){
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
         for (PhotonPipelineResult result : results){
+            // Skip if no targets
             if (!result.hasTargets()){
                 continue;
             }
+            
+            // try to get an estimate
             Optional<EstimatedRobotPose> estimate = poseEstimator.estimateCoprocMultiTagPose(result);
+
+            // if multitag fails
             if (estimate.isEmpty()) {
                 estimate = poseEstimator.estimateLowestAmbiguityPose(result);
+                // SmartDashboard.putString("PhotonVision pose epmpty", "");
             }
 
             if (estimate.isEmpty()) {
+                SmartDashboard.putString("Vision Status", "No valid pose estimate found");
                 continue;
             }
 
+            EstimatedRobotPose est = estimate.get();
+            SmartDashboard.putString("Vision Status", "Pose estimate found with " + result.getTargets().size() + " tags");
+            
+            var stdDevs = getVisionStdDevs(result);
+            SmartDashboard.putNumber("Vision StdDev X", stdDevs.get(0,
+            0));
+
+
             drive.m_poseEstimator.addVisionMeasurement(
-                estimate.get().estimatedPose.toPose2d(),
-                estimate.get().timestampSeconds,
-                getVisionStdDevs(result));
+                est.estimatedPose.toPose2d(),
+                est.timestampSeconds,
+                stdDevs);
+            
+            SmartDashboard.putNumber("Vision X", est.estimatedPose.getX());
+            SmartDashboard.putNumber("Vision Y", est.estimatedPose.getY());
+            
         }
     }
 
