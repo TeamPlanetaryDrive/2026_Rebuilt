@@ -48,7 +48,9 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
             // slot 1 - kPosition
             .p(0.1, ClosedLoopSlot.kSlot1)
             .i(0, ClosedLoopSlot.kSlot1)
-            .d(0, ClosedLoopSlot.kSlot1);
+            .d(0, ClosedLoopSlot.kSlot1)
+            // make the motor less violent
+            .outputRange(-0.3, 0.3, ClosedLoopSlot.kSlot1);
         
         angleMotorConfig.encoder
             .positionConversionFactor(360.0 / 75.0) // check ratio
@@ -66,7 +68,7 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
         angleMotorConfig.smartCurrentLimit(40);
         spinMotorConfig.smartCurrentLimit(40);
 
-        angleMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+        angleMotorConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
         spinMotorConfig.idleMode(SparkBaseConfig.IdleMode.kCoast);
 
         // Making moters move the correct way:
@@ -97,16 +99,20 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
         // CHANGED: Removed the extra math, and forced it to use Slot 1
         intakeAngleMotorPID.setReference(degrees, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
+
+    public void coastIntakeRotate(){
+        intakeAngleMotor.set(0);
+    }
     
     // start intake
     public void start() {
-        setIntakeSpeed(1000);
+        setIntakeSpeed(600);
         // CHANGED: Removed setIntakeAngle so this method ONLY spins the rollers
     }
 
     public void stop() {
         // CHANGED: Use setReference and force Slot 0
-        intakeSpinMotorPID.setReference(0, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+        intakeSpinMotor.set(0);
     }
 
     @Override

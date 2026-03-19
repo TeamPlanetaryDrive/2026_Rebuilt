@@ -106,10 +106,12 @@ public class DriveSubsystem extends SubsystemBase {
     stateStdDevs,
     visionMeasurementStdDevs
   );
+
   /** Creates a new DriveSubsystem. */
   @SuppressWarnings("CallToPrintStackTrace")
   public DriveSubsystem(PhotonVision vision) {
     this.vision = vision;
+    SmartDashboard.putData("Field", field2d);
     AprilTagFieldLayout layout;
     try {
         layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2026RebuiltAndymark.m_resourceFile);
@@ -127,7 +129,7 @@ public class DriveSubsystem extends SubsystemBase {
     
     tab.addString("Pose", this::getFormattedPose).withPosition(0, 0).withSize(2, 0);
     tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
-  
+    
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     m_gyro.reset();
@@ -179,9 +181,12 @@ public class DriveSubsystem extends SubsystemBase {
         });
 
     this.vision.update(this);
-    
-    SmartDashboard.putNumber("Gyro", getAngle());
     field2d.setRobotPose(getPose());
+    Pose2d pose = m_poseEstimator.getEstimatedPosition();
+    field2d.setRobotPose(pose);
+    SmartDashboard.putNumber("Robot X", pose.getX());
+    SmartDashboard.putNumber("Robot Y", pose.getY());
+    SmartDashboard.putNumber("Robot Heading Deg", pose.getRotation().getDegrees());
   }
 // =============
   public void startGoToOnRadius(Translation2d target, double radiusMeters) {

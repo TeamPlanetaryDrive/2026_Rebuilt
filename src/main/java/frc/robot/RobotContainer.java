@@ -34,6 +34,8 @@ import frc.robot.subsystems.bot.AbsoluteIntakeSubsystem;
 import frc.robot.subsystems.bot.RelativeIntakeSubsystem;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 
+import edu.wpi.first.wpilibj2.command.Commands;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -134,7 +136,21 @@ public class RobotContainer {
 
     // Spin up the shooter when the Right Bumper is pressed, stop when released
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .onTrue(m_shooter.runOnce(() -> m_shooter.start()))
+        .onTrue(
+            Commands.sequence(
+                // 1. Back up the feeder AND start the shooter wheels simultaneously
+                Commands.runOnce(() -> {
+                    m_shooter.feedBackward();
+                    m_shooter.startShooter();
+                }, m_shooter),
+
+                // 2. Wait exactly 0.25 seconds to let the wheels spin up
+                Commands.waitSeconds(0.50),
+
+                // 3. Ram the feeder forward to fire the ball
+                Commands.runOnce(() -> m_shooter.feedForward(), m_shooter)
+            )
+        )        // Stop everything the moment the driver lets go of the bumper
         .onFalse(m_shooter.runOnce(() -> m_shooter.stop()));
 
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)

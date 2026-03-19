@@ -138,16 +138,4 @@ public final class Constants {
         public static final double kFreeSpeedRpm = 5676;
     }
 
-
-    // new code
-    public static final class Drive { // Or DriveConstants
-        // Add this line:
-        public static final PathConstraints kApproachConstraints = 
-            new PathConstraints(
-                3.0, // Max Velocity (m/s)
-                3.0, // Max Acceleration (m/s^2)
-                Units.degreesToRadians(540), // Max Angular Velocity
-                Units.degreesToRadians(720)  // Max Angular Acceleration
-            );
-    }
 }
