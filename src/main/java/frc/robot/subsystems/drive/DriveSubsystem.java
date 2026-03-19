@@ -189,71 +189,71 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Robot Heading Deg", pose.getRotation().getDegrees());
   }
 // =============
-  public void startGoToOnRadius(Translation2d target, double radiusMeters) {
-    Pose2d currentPose = getPose();
-    Pose2d goalPose = computeNearestPoseOnRadius(currentPose, target, radiusMeters);
+  // public void startGoToOnRadius(Translation2d target, double radiusMeters) {
+  //   Pose2d currentPose = getPose();
+  //   Pose2d goalPose = computeNearestPoseOnRadius(currentPose, target, radiusMeters);
 
-    // Already basically at the nearest point on the radius
-    if (currentPose.getTranslation().getDistance(goalPose.getTranslation()) < 0.03) {
-      return;
-    }
+  //   // Already basically at the nearest point on the radius
+  //   if (currentPose.getTranslation().getDistance(goalPose.getTranslation()) < 0.03) {
+  //     return;
+  //   }
 
-    PathPlannerPath path = buildStraightLinePath(currentPose, goalPose);
-    AutoBuilder.followPath(path).schedule();
-  }
+  //   PathPlannerPath path = buildStraightLinePath(currentPose, goalPose);
+  //   AutoBuilder.followPath(path).schedule();
+  // }
 
-  public static Pose2d computeNearestPoseOnRadius(
-    Pose2d robotPose, Translation2d target, double radiusMeters) {
+  // public static Pose2d computeNearestPoseOnRadius(
+  //   Pose2d robotPose, Translation2d target, double radiusMeters) {
 
-    Translation2d robot = robotPose.getTranslation();
-    Translation2d delta = robot.minus(target);
-    double dist = delta.getNorm();
+  //   Translation2d robot = robotPose.getTranslation();
+  //   Translation2d delta = robot.minus(target);
+  //   double dist = delta.getNorm();
 
-    Translation2d unitDirection;
+  //   Translation2d unitDirection;
 
-    if (dist > 1e-6) {
-      unitDirection = new Translation2d(delta.getX() / dist, delta.getY() / dist);
-    } else {
-      // No unique nearest point if robot is exactly at the center.
-      // Pick current heading direction as a deterministic fallback.
-      unitDirection =
-          new Translation2d(
-              robotPose.getRotation().getCos(),
-              robotPose.getRotation().getSin());
-    }
+  //   if (dist > 1e-6) {
+  //     unitDirection = new Translation2d(delta.getX() / dist, delta.getY() / dist);
+  //   } else {
+  //     // No unique nearest point if robot is exactly at the center.
+  //     // Pick current heading direction as a deterministic fallback.
+  //     unitDirection =
+  //         new Translation2d(
+  //             robotPose.getRotation().getCos(),
+  //             robotPose.getRotation().getSin());
+  //   }
 
-    Translation2d goalTranslation = target.plus(unitDirection.times(radiusMeters));
+  //   Translation2d goalTranslation = target.plus(unitDirection.times(radiusMeters));
 
-    // Face the center target when you arrive
-    Rotation2d goalHolonomicRotation = target.minus(goalTranslation).getAngle();
+  //   // Face the center target when you arrive
+  //   Rotation2d goalHolonomicRotation = target.minus(goalTranslation).getAngle();
 
-    return new Pose2d(goalTranslation, goalHolonomicRotation);
-  }
+  //   return new Pose2d(goalTranslation, goalHolonomicRotation);
+  // }
 
-  private PathPlannerPath buildStraightLinePath(Pose2d startPose, Pose2d goalPose) {
-    Translation2d delta = goalPose.getTranslation().minus(startPose.getTranslation());
-    Rotation2d travelDirection = delta.getAngle();
+  // private PathPlannerPath buildStraightLinePath(Pose2d startPose, Pose2d goalPose) {
+  //   Translation2d delta = goalPose.getTranslation().minus(startPose.getTranslation());
+  //   Rotation2d travelDirection = delta.getAngle();
 
-    // These rotations are path direction, not robot holonomic heading
-    List<Waypoint> waypoints =
-        PathPlannerPath.waypointsFromPoses(
-            new Pose2d(startPose.getTranslation(), travelDirection),
-            new Pose2d(goalPose.getTranslation(), travelDirection));
+  //   // These rotations are path direction, not robot holonomic heading
+  //   List<Waypoint> waypoints =
+  //       PathPlannerPath.waypointsFromPoses(
+  //           new Pose2d(startPose.getTranslation(), travelDirection),
+  //           new Pose2d(goalPose.getTranslation(), travelDirection));
 
-    PathPlannerPath path =
-        new PathPlannerPath(
-            waypoints,
-            Constants.Drive.kApproachConstraints,
-            null,
-            new GoalEndState(
-                0.0,
-                goalPose.getRotation()));
+  //   PathPlannerPath path =
+  //       new PathPlannerPath(
+  //           waypoints,
+  //           Constants.Drive.kApproachConstraints,
+  //           null,
+  //           new GoalEndState(
+  //               0.0,
+  //               goalPose.getRotation()));
 
-    // Runtime field coordinates are already correct
-    path.preventFlipping = true;
+  //   // Runtime field coordinates are already correct
+  //   path.preventFlipping = true;
 
-    return path;
-  }
+  //   return path;
+  // }
 // ==============
   public SwerveModulePosition[] getModulePosition() {
     return new SwerveModulePosition[] {
