@@ -85,6 +85,14 @@ public final class Constants {
         public static final int kRearRightTurningCanId = 13;
 
         public static final boolean kGyroReversed = true;
+
+        public static final double kP = 0.001;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0001;
+
+        public static final double kDistanceTolerance = 0.1;
+        public static final double kLostTagCancelSec = 1.0;
+        public static final int kTargetTagId = 28; //change
     }
 
     public static final class ModuleConstants {
