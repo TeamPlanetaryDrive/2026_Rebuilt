@@ -20,8 +20,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Configs;
 
 public class MAXSwerveModule {
-  private final SparkMax m_drivingSpark;
-  private final SparkMax m_turningSpark;
+  public final SparkMax m_drivingSpark;
+  public final SparkMax m_turningSpark;
 
   private SparkMaxConfig driving_config;
   private SparkMaxConfig turning_config;

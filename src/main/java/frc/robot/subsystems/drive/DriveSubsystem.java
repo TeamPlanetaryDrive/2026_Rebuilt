@@ -183,6 +183,25 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Robot X", pose.getX());
     SmartDashboard.putNumber("Robot Y", pose.getY());
     SmartDashboard.putNumber("Robot Heading Deg", pose.getRotation().getDegrees());
+
+    // front left motor temperatures
+    SmartDashboard.putNumber("Front Left Driving Temperature", m_frontLeft.m_drivingSpark.getMotorTemperature());
+    SmartDashboard.putNumber("Front Left Turning Temperature", m_frontLeft.m_turningSpark.getMotorTemperature());
+    
+    // front right motor temperatures
+    SmartDashboard.putNumber("Front Right Driving Temperature", m_frontRight.m_drivingSpark.getMotorTemperature());
+    SmartDashboard.putNumber("Front Right Turning Temperature", m_frontRight.m_turningSpark.getMotorTemperature());
+    
+    // back left motor temperatures
+    SmartDashboard.putNumber("Rear Left Driving Temperature", m_rearLeft.m_drivingSpark.getMotorTemperature());
+    SmartDashboard.putNumber("Rear Left Turning Temperature", m_rearLeft.m_turningSpark.getMotorTemperature());
+    
+    // back right motor temperatures
+    SmartDashboard.putNumber("Rear Right Driving Temperature", m_rearRight.m_drivingSpark.getMotorTemperature());
+    SmartDashboard.putNumber("Rear Right Turning Temperature", m_rearRight.m_turningSpark.getMotorTemperature());
+
+
+
   }
 // =============
   // public void startGoToOnRadius(Translation2d target, double radiusMeters) {
