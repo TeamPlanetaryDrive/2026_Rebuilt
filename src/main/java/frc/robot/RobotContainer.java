@@ -150,8 +150,7 @@ public class RobotContainer {
                 // 3. Ram the feeder forward to fire the ball
                 Commands.runOnce(() -> m_shooter.feedForward(), m_shooter)
             )
-        )
-        // Stop everything the moment the driver lets go of the bumper
+        )        // Stop everything the moment the driver lets go of the bumper
         .onFalse(m_shooter.runOnce(() -> m_shooter.stop()));
 
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
@@ -160,11 +159,11 @@ public class RobotContainer {
 
     // Hold A to raise the feeder, release A to lower it back to 0 (FIX THIS SO IT DOES NOT GO SO FAST+GET ENCODER)
     new JoystickButton(m_driverController, Button.kA.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(-140)));  // Goes up when pressed
-        // .onFalse(m_intake.runOnce(() -> m_intake.setIntakeAngle(0)));  // Goes down when released
+        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(-40)))  // Goes up when pressed
+        .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
     new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setIntakeAngle(-80)));  // Goes up when pressed
-        .onFalse(m_intake.runOnce(() -> m_intake.setIntakeAngle(-140))); 
+        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(40)))  // Goes up when pressed
+        .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
   }
 
   public Command getAutonomousCommand() {

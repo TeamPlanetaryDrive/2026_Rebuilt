@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -32,6 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkClosedLoopController feederLeadPID;
     private SparkMaxConfig feederLeadConfig;
     private SparkMaxConfig feederFollowConfig;
+    private double shooterSpeed = 500;
 
     private final VelocityVoltage m_velocityControl = new VelocityVoltage(0);
 
@@ -68,6 +70,9 @@ public class ShooterSubsystem extends SubsystemBase {
     
         this.feederLeadEncoder = feederLeadMotor.getEncoder();
         this.feederLeadPID = feederLeadMotor.getClosedLoopController();
+
+        SmartDashboard.putNumber("Desired Shooter Speed", 500);
+        SmartDashboard.putNumber("Desired Feeder Speed", 500);
     }
 
     // set single shooter speed
@@ -163,20 +168,21 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        shooter1.setControl(m_velocityControl.withVelocity(0));
-        shooter2.setControl(m_velocityControl.withVelocity(0));
-        shooter3.setControl(m_velocityControl.withVelocity(0));
-        feederLeadPID.setReference(0, SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+        shooter1.setControl(new CoastOut());
+        shooter2.setControl(new CoastOut());
+        shooter3.setControl(new CoastOut());
+        feederLeadMotor.set(0);
     }
 
     // 1. Spin up just the shooter wheels
     public void startShooter() {
-        setAllShooterSpeeds(500); 
+        // max ~ 614
+        setAllShooterSpeeds(SmartDashboard.getNumber("Desired Shooter Speed", 500)); 
     }
 
     // 2. Run the feeder forward to shoot
     public void feedForward() {
-        setFeederSpeed(250); 
+        setFeederSpeed(SmartDashboard.getNumber("Desired Feeder Speed", 500)); 
     }
 
     // 3. Run the feeder backward to un-jam / get a running start
