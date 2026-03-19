@@ -67,20 +67,17 @@ public class MoveBackAndShoot extends Command {
         ).andThen(() -> drive.drive(0, 0, 0, false));
 
         innerCommand = Commands.sequence(
+
+            moveCommand,
+
             Commands.runOnce(() -> {
                 shooter.startShooter();
                 shooter.feedBackward();
             }, shooter),
 
-            moveCommand,
-
             Commands.runOnce(shooter::feedForward, shooter),
-            Commands.waitSeconds(0.5),
+            Commands.waitSeconds(0.5)
 
-            Commands.runOnce(() -> {
-                drive.stop();
-                shooter.stop();
-            }, drive, shooter)
         );
 
         innerCommand.initialize();
