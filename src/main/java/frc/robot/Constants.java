@@ -8,8 +8,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
-import com.pathplanner.lib.path.PathConstraints;
-
 public final class Constants {
     public static final class shooterConstants {
         public static final int shooter1CANID = 20; 
@@ -32,8 +30,7 @@ public final class Constants {
 
     public static final class PhotonVisionConstants {
 
-        public static final int[] redCoralReefIds = {6, 7, 8, 9, 10, 11}; 
-        public static final int[] blueCoralReefIds = {17, 18, 19, 20, 21, 22}; 
+        public static final double kDistanceFromHub = 2.6;
 
         public static final double offsetXMeters = 0.30226;
         public static final double offsetYMeters = 0.3429;

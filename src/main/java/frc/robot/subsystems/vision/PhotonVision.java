@@ -132,6 +132,25 @@ public class PhotonVision extends SubsystemBase {
 
         return OptionalDouble.empty();
     }
+
+    public OptionalDouble getTargetTagYawRadians() {
+        PhotonPipelineResult result = camera.getLatestResult();
+
+        if (!result.hasTargets()) {
+            return OptionalDouble.empty();
+        }
+
+        for (PhotonTrackedTarget target : result.getTargets()) {
+            if (target.getFiducialId() == Constants.DriveConstants.kTargetTagId) {
+                Transform3d camToTarget = target.getBestCameraToTarget();
+                // In the camera XY plane, yaw to target is atan2(Y, X)
+                double yawRad = Math.atan2(camToTarget.getY(), camToTarget.getX());
+                return OptionalDouble.of(yawRad);
+            }
+        }
+
+        return OptionalDouble.empty();
+    }
     
     public void setPoseUpdatesEnabled(boolean enabled) {
         this.poseUpdatesEnabled = enabled;
