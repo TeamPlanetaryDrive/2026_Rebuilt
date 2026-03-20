@@ -29,6 +29,8 @@ public class MoveBackAndShoot extends Command {
 
     @Override
     public void initialize() {
+        // Disable vision-based pose injections during this autonomous
+        drive.disableVisionPoseUpdates();
         Pose2d start = drive.getPose();
 
         Pose2d end = new Pose2d(
@@ -95,12 +97,9 @@ public class MoveBackAndShoot extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        // if (innerCommand != null) {
-        //     innerCommand.end(interrupted);
-        // }
-        // // drive.stop();
-        // shooter.stop();
-        return;
+        // Re-enable vision pose updates when this auto ends
+        drive.enableVisionPoseUpdates();
+
     }
 
     @Override
