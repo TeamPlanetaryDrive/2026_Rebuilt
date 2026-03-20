@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -71,8 +72,10 @@ public class ShooterSubsystem extends SubsystemBase {
         this.feederLeadEncoder = feederLeadMotor.getEncoder();
         this.feederLeadPID = feederLeadMotor.getClosedLoopController();
 
-        SmartDashboard.putNumber("Desired Shooter Speed", 500);
-        SmartDashboard.putNumber("Desired Feeder Speed", 500);
+        Preferences.initDouble("Desired Shooter Speed", 410);
+        Preferences.initDouble("Desired Feeder Speed", 500);
+        SmartDashboard.putNumber("Desired Shooter Speed", Preferences.getDouble("Desired Shooter Speed", 410));
+        SmartDashboard.putNumber("Desired Feeder Speed", Preferences.getDouble("Desired Feeder Speed", 500));
     }
 
     // set single shooter speed
@@ -165,6 +168,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("Feeder Lead Temp C", feederLeadMotor.getMotorTemperature());
         SmartDashboard.putNumber("Feeder Follow Temp C", feederFollowMotor.getMotorTemperature());
+        
+        Preferences.setDouble("Desired Shooter Speed", SmartDashboard.getNumber("Desired Shooter Speed", 410));
+        Preferences.setDouble("Desired Feeder Speed", SmartDashboard.getNumber("Desired Feeder Speed", 500));
     }
 
     public void stop() {
@@ -177,7 +183,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // 1. Spin up just the shooter wheels
     public void startShooter() {
         // max ~ 614
-        setAllShooterSpeeds(SmartDashboard.getNumber("Desired Shooter Speed", 500)); 
+        setAllShooterSpeeds(SmartDashboard.getNumber("Desired Shooter Speed", 410)); 
     }
 
     // 2. Run the feeder forward to shoot
