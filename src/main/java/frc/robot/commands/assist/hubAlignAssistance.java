@@ -15,14 +15,14 @@ import frc.robot.subsystems.vision.PhotonVision;
 // first should be used to move back to a set distance from the hub
 // no driver control input; robot drives forward/backward to reach target distance
 // ends when at target distance or vision target lost for too long
-public class HubAlignAssistance extends Command {
+public class hubAlignAssistance extends Command {
     private final DriveSubsystem drive;
     private final PhotonVision vision;
     private final PIDController distancePid;
 
     private double lastValidTagTime = -1.0;
 
-    public HubAlignAssistance(DriveSubsystem drive, PhotonVision vision) {
+    public hubAlignAssistance(DriveSubsystem drive, PhotonVision vision) {
         this.drive = drive;
         this.vision = vision;
 
@@ -101,17 +101,20 @@ public class HubAlignAssistance extends Command {
 
         // cancel if no recent tag was available at all
         if (lastValidTagTime < 0) {
+            SmartDashboard.putString("Vision Align Status", "no recent available tag");
             return true;
         }
 
         // end if tag has been lost too long
         if ((now - lastValidTagTime) > Constants.DriveConstants.kLostTagCancelSec) {
+            SmartDashboard.putString("Vision Align Status", "Tag has been lost!!!");
             return true;
         }
 
         // end if PID is satisfied and we currently still have a distance reading
         OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
         if (distanceOpt.isPresent()) {
+            SmartDashboard.putString("Vision Align Status", "reached PID location w/ distance");
             return distancePid.atSetpoint();
         }
 

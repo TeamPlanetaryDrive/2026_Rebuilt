@@ -92,7 +92,7 @@ public final class Constants {
 
         public static final double kDistanceTolerance = 0.1;
         public static final double kLostTagCancelSec = 1.0;
-        public static final int kTargetTagId = 28; //change
+        public static final int kTargetTagId = 6; //change
     }
 
     public static final class ModuleConstants {
