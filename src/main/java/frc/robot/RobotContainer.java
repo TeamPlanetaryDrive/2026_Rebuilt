@@ -175,7 +175,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new MoveBackAndShoot(m_robotDrive, m_shooter);
+    return MoveBackAndShoot.create(m_robotDrive, m_shooter);
     // return autoChooser.getSelected();
   }
 }
