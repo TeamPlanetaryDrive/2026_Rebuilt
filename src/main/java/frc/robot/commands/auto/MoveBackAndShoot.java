@@ -93,15 +93,16 @@ public class MoveBackAndShoot extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        if (innerCommand != null) {
-            innerCommand.end(interrupted);
-        }
-        drive.stop();
-        shooter.stop();
+        // if (innerCommand != null) {
+        //     innerCommand.end(interrupted);
+        // }
+        // // drive.stop();
+        // shooter.stop();
+        return;
     }
 
     @Override
     public boolean isFinished() {
-        return innerCommand != null && innerCommand.isFinished();
+        return false;
     }
 }
