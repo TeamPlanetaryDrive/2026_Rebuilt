@@ -74,9 +74,12 @@ public class MoveBackAndShoot extends Command {
                 shooter.startShooter();
                 shooter.feedBackward();
             }, shooter),
-
+            
+            Commands.waitSeconds(1.0),
             Commands.runOnce(shooter::feedForward, shooter),
-            Commands.waitSeconds(0.5)
+
+            Commands.waitSeconds(10.0)
+
 
         );
 
@@ -92,15 +95,16 @@ public class MoveBackAndShoot extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        if (innerCommand != null) {
-            innerCommand.end(interrupted);
-        }
-        drive.stop();
-        shooter.stop();
+        // if (innerCommand != null) {
+        //     innerCommand.end(interrupted);
+        // }
+        // // drive.stop();
+        // shooter.stop();
+        return;
     }
 
     @Override
     public boolean isFinished() {
-        return innerCommand != null && innerCommand.isFinished();
+        return false;
     }
 }

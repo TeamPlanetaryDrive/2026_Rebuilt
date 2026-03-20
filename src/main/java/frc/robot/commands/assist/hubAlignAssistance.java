@@ -4,22 +4,17 @@ import java.util.OptionalDouble;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.bot.ShooterSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+
+//  Command that assists the driver in aligning to the hub using vision data
+// first should be used to move back to a set distance from the hub
+// no driver control input; robot drives forward/backward to reach target distance
+// ends when at target distance or vision target lost for too long
 public class HubAlignAssistance extends Command {
     private final DriveSubsystem drive;
     private final PhotonVision vision;
@@ -49,8 +44,6 @@ public class HubAlignAssistance extends Command {
         OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
         if (distanceOpt.isPresent()) {
             lastValidTagTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
-        } else {
-            lastValidTagTime = -1.0;
         }
 
         // SmartDashboard.putString("Vision Align Command", "Initialized");
@@ -69,24 +62,35 @@ public class HubAlignAssistance extends Command {
                 Constants.AutoConstants.kMoveBackDistance
             );
 
-            output = MathUtil.clamp(
-                output,
-                -Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                Constants.AutoConstants.kMaxSpeedMetersPerSecond
+            // output = MathUtil.clamp(
+            //     output,
+            //     -Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+            //     Constants.AutoConstants.kMaxSpeedMetersPerSecond
+            // );
+
+            double speedCmdMps = MathUtil.clamp(
+            distancePid.calculate(
+            currentDistance,
+            Constants.AutoConstants.kMoveBackDistance
+            ),
+            -Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+            Constants.AutoConstants.kMaxSpeedMetersPerSecond
             );
+
+            double xCmd = speedCmdMps / Constants.DriveConstants.kMaxSpeedMetersPerSecond;
 
             SmartDashboard.putNumber("Tag Distance", currentDistance);
             SmartDashboard.putNumber(
                 "Tag Distance Error",
                 currentDistance - Constants.AutoConstants.kMoveBackDistance
             );
-            SmartDashboard.putNumber("Tag PID Output", output);
+            SmartDashboard.putNumber("Tag PID Output", speedCmdMps);
 
             // forward/backward only; no driver input
-            drive.drive(output, 0.0, 0.0, true);
+            drive.drive(xCmd, 0.0, 0.0, false);
         } else {
             // lost tag temporarily: stop while waiting briefly
-            drive.drive(0.0, 0.0, 0.0, true);
+            drive.drive(0.0, 0.0, 0.0, false);
             SmartDashboard.putString("Vision Align Command", "Tag temporarily lost");
         }
     }
@@ -116,7 +120,7 @@ public class HubAlignAssistance extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        drive.drive(0.0, 0.0, 0.0, true);
+        drive.drive(0.0, 0.0, 0.0, false);
 
         if (interrupted) {
             SmartDashboard.putString("Vision Align Command", "Interrupted");
