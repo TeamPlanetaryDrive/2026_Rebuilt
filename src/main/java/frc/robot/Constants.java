@@ -90,6 +90,13 @@ public final class Constants {
         public static final double kDistanceTolerance = 0.1;
         public static final double kLostTagCancelSec = 1.0;
         public static final int kTargetTagId = 26; //change
+
+        public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
+        public static final double hP = 1.0;
+        public static final double hI = 0.0;
+        public static final double hD = 0.0;
+
+        // public static final double kMaxAng
     }
 
     public static final class ModuleConstants {

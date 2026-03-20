@@ -5,8 +5,10 @@ import java.util.OptionalDouble;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.PhotonVision;
 
@@ -19,6 +21,7 @@ public class hubAlignAssistance extends Command {
     private final DriveSubsystem drive;
     private final PhotonVision vision;
     private final PIDController distancePid;
+    private final PIDController headingPid;
 
     private double lastValidTagTime = -1.0;
 
@@ -32,7 +35,15 @@ public class hubAlignAssistance extends Command {
             Constants.DriveConstants.kD
         );
 
-        distancePid.setTolerance(Constants.DriveConstants.kDistanceTolerance);
+        this.headingPid = new PIDController(
+            DriveConstants.hP,
+            DriveConstants.hI,
+            DriveConstants.hD
+        );
+
+        distancePid.setTolerance(DriveConstants.kDistanceTolerance);
+        headingPid.enableContinuousInput(-Math.PI, Math.PI);
+        headingPid.setTolerance(Units.degreesToRadians(2.0));
 
         addRequirements(drive);
     }
@@ -40,6 +51,7 @@ public class hubAlignAssistance extends Command {
     @Override
     public void initialize() {
         distancePid.reset();
+        headingPid.reset();
 
         OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
         if (distanceOpt.isPresent()) {
@@ -54,12 +66,13 @@ public class hubAlignAssistance extends Command {
     @Override
     public void execute() {
         OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
+        var yawOpt = vision.getTargetTagYawRadians();
 
-        if (distanceOpt.isPresent()) {
+        if (distanceOpt.isPresent() && yawOpt.isPresent()) {
             lastValidTagTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
             double currentDistance = distanceOpt.getAsDouble();
-
+            double currentYaw = yawOpt.getAsDouble();
             // output = MathUtil.clamp(
             //     output,
             //     -Constants.AutoConstants.kMaxSpeedMetersPerSecond,
@@ -69,24 +82,32 @@ public class hubAlignAssistance extends Command {
             double speedCmdMps = MathUtil.clamp(
             distancePid.calculate(
             currentDistance,
-            Constants.AutoConstants.kMoveBackDistance
+            Constants.PhotonVisionConstants.kDistanceFromHub
             ),
             -Constants.AutoConstants.kMaxSpeedMetersPerSecond,
             Constants.AutoConstants.kMaxSpeedMetersPerSecond
             );
 
             double xCmd = speedCmdMps / Constants.DriveConstants.kMaxSpeedMetersPerSecond;
+            double rotCmdRps = MathUtil.clamp(
+                headingPid.calculate(currentYaw, 0.0),
+                -Constants.DriveConstants.kMaxAngularSpeedRadiansPerSecond,
+                Constants.DriveConstants.kMaxAngularSpeedRadiansPerSecond
+            );
+            double rotCmd = rotCmdRps / Constants.DriveConstants.kMaxAngularSpeedRadiansPerSecond;
 
             SmartDashboard.putNumber("Tag Distance", currentDistance);
             SmartDashboard.putNumber("Speed", xCmd);
             SmartDashboard.putNumber(
                 "Tag Distance Error",
-                currentDistance - Constants.AutoConstants.kMoveBackDistance
+                currentDistance - Constants.PhotonVisionConstants.kDistanceFromHub
             );
             SmartDashboard.putNumber("Tag PID Output", speedCmdMps);
+            SmartDashboard.putNumber("Tag Yaw (deg)", Math.toDegrees(currentYaw));
+            SmartDashboard.putNumber("Heading PID Output (rad/s)", rotCmdRps);
 
             // forward/backward only; no driver input
-            drive.drive(-xCmd, 0.0, 0.0, false);
+            drive.drive(-xCmd, 0.0, rotCmd, false);
         } else {
             // lost tag temporarily: stop while waiting briefly
             drive.drive(0.0, 0.0, 0.0, false);
@@ -112,8 +133,10 @@ public class hubAlignAssistance extends Command {
 
         // end if PID is satisfied and we currently still have a distance reading
         OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
-        if (distanceOpt.isPresent()) {
-            SmartDashboard.putString("Vision Align Status", "reached PID location w/ distance");
+        var yawOpt = vision.getTargetTagYawRadians();
+        
+        if (distanceOpt.isPresent() && yawOpt.isPresent()) {
+            SmartDashboard.putString("Vision Align Status", "reached PID location");
             return distancePid.atSetpoint();
         }
 
