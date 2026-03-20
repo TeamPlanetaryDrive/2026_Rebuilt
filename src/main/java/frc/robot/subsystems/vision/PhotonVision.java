@@ -35,6 +35,8 @@ public class PhotonVision extends SubsystemBase {
     private final PhotonPoseEstimator poseEstimator;
     private PhotonPipelineResult result;
     private Optional<EstimatedRobotPose> pose;
+    // Gate to allow callers to temporarily disable pose updates into the drive estimator
+    private volatile boolean poseUpdatesEnabled = true;
 
     public PhotonVision(String cameraName){
         camera = new PhotonCamera(cameraName);
@@ -60,6 +62,10 @@ public class PhotonVision extends SubsystemBase {
 
 
     public void update(DriveSubsystem drive){
+        if (!poseUpdatesEnabled) {
+            // Vision is running, but pose injections are disabled (e.g., during autonomous)
+            return;
+        }
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
         for (PhotonPipelineResult result : results){
             // Skip if no targets
@@ -127,6 +133,13 @@ public class PhotonVision extends SubsystemBase {
         return OptionalDouble.empty();
     }
     
+    public void setPoseUpdatesEnabled(boolean enabled) {
+        this.poseUpdatesEnabled = enabled;
+        SmartDashboard.putBoolean("Vision Pose Updates Enabled", enabled);
+    }
+
+    public void enablePoseUpdates() { setPoseUpdatesEnabled(true); }
+    public void disablePoseUpdates() { setPoseUpdatesEnabled(false); }
 
     private Matrix<N3, N1> getVisionStdDevs(PhotonPipelineResult result) {
     // Very simple placeholder heuristic. Tune on your robot.

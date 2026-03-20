@@ -75,8 +75,8 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
         spinMotorConfig.inverted(true);
         angleMotorConfig.inverted(true);
 
-        intakeSpinMotor.configure(spinMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        intakeAngleMotor.configure(angleMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        intakeSpinMotor.configure(spinMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        intakeAngleMotor.configure(angleMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         intakeAngleMotorEncoder.setPosition(0);
         intakeSpinMotorEncoder.setPosition(0);
@@ -89,8 +89,10 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
         intakeSpinMotorPID.setReference(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
 
-    public void setRotateSpeed(double radiansPerSecond){
+    public void setRotateSpeed(double radiansPerSecond, int currentLimit){
         double rpm = 60 * radiansPerSecond / (2 * Math.PI);
+        angleMotorConfig.smartCurrentLimit(currentLimit);
+        intakeAngleMotor.configure(angleMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         // CHANGED: Use setReference and force Slot 0
         intakeAngleMotorPID.setReference(rpm, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
@@ -107,6 +109,7 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
     // start intake
     public void start() {
         setIntakeSpeed(600);
+        setRotateSpeed(-4, 10);
         // CHANGED: Removed setIntakeAngle so this method ONLY spins the rollers
     }
 

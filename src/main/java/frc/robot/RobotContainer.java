@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.assist.hubAlignAssistance;
+// import frc.robot.commands.assist.HubAlignAssistance;
 import frc.robot.commands.auto.MoveBackAndShoot;
 // jacoby is awesome
 // import frc.robot.commands.arm.ArmCommand;
@@ -158,13 +160,18 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
         .onTrue(m_intake.runOnce(() -> m_intake.start()))
         .onFalse(m_intake.runOnce(() -> m_intake.stop()));
+    
+
+    // new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    //     .whileTrue(new HubAlignAssistance(m_robotDrive, m_photonVision)
+    //     );  
 
     // Hold A to raise the feeder, release A to lower it back to 0 (FIX THIS SO IT DOES NOT GO SO FAST+GET ENCODER)
     new JoystickButton(m_driverController, Button.kA.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(-40)))  // Goes up when pressed
+        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(-40, 40)))  // Goes up when pressed
         .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
     new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(40)))  // Goes up when pressed
+        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(40, 40)))  // Goes up when pressed
         .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
 
       new JoystickButton(m_driverController, Button.kX.value)
@@ -172,8 +179,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // return new hubAlignAssistance(m_robotDrive, m_photonVision);
-    return new MoveBackAndShoot(m_robotDrive, m_shooter);
+    return MoveBackAndShoot.create(m_robotDrive, m_shooter);
     // return autoChooser.getSelected();
   }
 }
