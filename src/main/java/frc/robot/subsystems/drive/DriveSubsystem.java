@@ -470,4 +470,14 @@ public class DriveSubsystem extends SubsystemBase {
   public void addVision(EstimatedRobotPose photonPose){
     m_poseEstimator.addVisionMeasurement(photonPose.estimatedPose.toPose2d(), photonPose.timestampSeconds);
   }
+
+  // --- Vision pose update gating ---
+  public void setVisionPoseUpdatesEnabled(boolean enabled) {
+    if (vision != null) {
+      vision.setPoseUpdatesEnabled(enabled);
+    }
+  }
+
+  public void disableVisionPoseUpdates() { setVisionPoseUpdatesEnabled(false); }
+  public void enableVisionPoseUpdates() { setVisionPoseUpdatesEnabled(true); }
 }
