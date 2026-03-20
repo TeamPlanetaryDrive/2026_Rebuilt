@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.assist.hubAlignAssistance;
 // import frc.robot.commands.assist.HubAlignAssistance;
 import frc.robot.commands.auto.MoveBackAndShoot;
 // jacoby is awesome
@@ -172,6 +173,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value)
         .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(40, 40)))  // Goes up when pressed
         .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
+
+      new JoystickButton(m_driverController, Button.kX.value)
+          .whileTrue(new hubAlignAssistance(m_robotDrive, m_photonVision));
   }
 
   public Command getAutonomousCommand() {

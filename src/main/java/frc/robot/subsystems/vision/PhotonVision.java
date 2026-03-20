@@ -2,6 +2,7 @@ package frc.robot.subsystems.vision;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -17,11 +18,14 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
@@ -68,7 +72,7 @@ public class PhotonVision extends SubsystemBase {
             if (!result.hasTargets()){
                 continue;
             }
-            
+
             // try to get an estimate
             Optional<EstimatedRobotPose> estimate = poseEstimator.estimateCoprocMultiTagPose(result);
 
@@ -98,9 +102,6 @@ public class PhotonVision extends SubsystemBase {
             
             SmartDashboard.putNumber("Vision Timestamp", est.timestampSeconds);
             SmartDashboard.putNumber("FPGA Timestamp", edu.wpi.first.wpilibj.Timer.getFPGATimestamp());
-
-            SmartDashboard.putNumber("Estimator X Before", drive.getPose().getX());
-            SmartDashboard.putNumber("Estimator Y Before", drive.getPose().getY());
             
             SmartDashboard.putNumber("Vision X", est.estimatedPose.getX());
             SmartDashboard.putNumber("Vision Y", est.estimatedPose.getY());
@@ -108,6 +109,30 @@ public class PhotonVision extends SubsystemBase {
         }
     }
 
+    public OptionalDouble getTargetTagDistanceMeters(){
+
+        PhotonPipelineResult result = camera.getLatestResult();
+
+        if (!result.hasTargets()) {
+            return OptionalDouble.empty();
+        }
+
+        for (PhotonTrackedTarget target : result.getTargets()) {
+            if (target.getFiducialId() == Constants.DriveConstants.kTargetTagId) {
+                Transform3d camToTarget = target.getBestCameraToTarget();
+
+                double distanceMeters = Math.hypot(
+                    camToTarget.getX(),
+                    camToTarget.getY()
+                );
+
+                return OptionalDouble.of(distanceMeters);
+            }
+        }
+
+        return OptionalDouble.empty();
+    }
+    
     public void setPoseUpdatesEnabled(boolean enabled) {
         this.poseUpdatesEnabled = enabled;
         SmartDashboard.putBoolean("Vision Pose Updates Enabled", enabled);
