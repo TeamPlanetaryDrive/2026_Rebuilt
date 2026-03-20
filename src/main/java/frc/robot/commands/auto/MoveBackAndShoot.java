@@ -64,7 +64,7 @@ public class MoveBackAndShoot extends Command {
             thetaController,
             drive::setModuleStates,
             drive
-        ).andThen(() -> drive.drive(0, 0, 0, false));
+        ).andThen(() -> drive.drive(0, 0, 0, true));
 
         innerCommand = Commands.sequence(
 
