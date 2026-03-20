@@ -168,7 +168,7 @@ public class RobotContainer {
         .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
 
       new JoystickButton(m_driverController, Button.kX.value)
-          .onTrue(new hubAlignAssistance(m_robotDrive, m_photonVision));
+          .whileTrue(new hubAlignAssistance(m_robotDrive, m_photonVision));
   }
 
   public Command getAutonomousCommand() {

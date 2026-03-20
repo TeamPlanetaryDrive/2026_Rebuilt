@@ -44,6 +44,8 @@ public class hubAlignAssistance extends Command {
         OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
         if (distanceOpt.isPresent()) {
             lastValidTagTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+        } else {
+            lastValidTagTime = -1.0;
         }
 
         // SmartDashboard.putString("Vision Align Command", "Initialized");
@@ -57,10 +59,6 @@ public class hubAlignAssistance extends Command {
             lastValidTagTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
             double currentDistance = distanceOpt.getAsDouble();
-            double output = distancePid.calculate(
-                currentDistance,
-                Constants.AutoConstants.kMoveBackDistance
-            );
 
             // output = MathUtil.clamp(
             //     output,
@@ -80,6 +78,7 @@ public class hubAlignAssistance extends Command {
             double xCmd = speedCmdMps / Constants.DriveConstants.kMaxSpeedMetersPerSecond;
 
             SmartDashboard.putNumber("Tag Distance", currentDistance);
+            SmartDashboard.putNumber("Speed", xCmd);
             SmartDashboard.putNumber(
                 "Tag Distance Error",
                 currentDistance - Constants.AutoConstants.kMoveBackDistance
@@ -87,7 +86,7 @@ public class hubAlignAssistance extends Command {
             SmartDashboard.putNumber("Tag PID Output", speedCmdMps);
 
             // forward/backward only; no driver input
-            drive.drive(xCmd, 0.0, 0.0, false);
+            drive.drive(-xCmd, 0.0, 0.0, false);
         } else {
             // lost tag temporarily: stop while waiting briefly
             drive.drive(0.0, 0.0, 0.0, false);
