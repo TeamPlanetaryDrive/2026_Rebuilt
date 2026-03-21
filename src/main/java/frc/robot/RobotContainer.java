@@ -176,6 +176,9 @@ public class RobotContainer {
 
       new JoystickButton(m_driverController, Button.kX.value)
           .whileTrue(new hubAlignAssistance(m_robotDrive, m_photonVision));
+
+      new JoystickButton(m_driverController, Button.kA.value)
+        .onTrue(m_robotDrive.runOnce(() -> m_robotDrive.resetGyro()));
   }
 
   public Command getAutonomousCommand() {

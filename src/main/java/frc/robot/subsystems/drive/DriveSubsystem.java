@@ -426,6 +426,10 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
+ public void resetGyro() {
+    m_gyro.reset();
+  }
+
   public Command getSwerveControllerCommand(Trajectory trajectory) {
     var thetaController = new ProfiledPIDController(
       AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints
