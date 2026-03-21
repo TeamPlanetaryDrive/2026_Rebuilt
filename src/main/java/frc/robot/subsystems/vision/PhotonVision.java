@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.vision.TagMeasurement;
+
 
 public class PhotonVision extends SubsystemBase {
     private final PhotonCamera camera; 
@@ -41,7 +43,7 @@ public class PhotonVision extends SubsystemBase {
     public PhotonVision(String cameraName){
         camera = new PhotonCamera(cameraName);
         layout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
-        poseEstimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, PhotonVisionConstants.transform);
+        poseEstimator = new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, PhotonVisionConstants.kRobotVisionOffset);
         //PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, was in between layout and PhotoVisionConstants.transform
     }
 
@@ -109,48 +111,56 @@ public class PhotonVision extends SubsystemBase {
         }
     }
 
-    public OptionalDouble getTargetTagDistanceMeters(){
+    public Optional<TagMeasurement> getTargetTagInformation(){
 
         PhotonPipelineResult result = camera.getLatestResult();
 
         if (!result.hasTargets()) {
-            return OptionalDouble.empty();
+            return Optional.empty();
         }
 
         for (PhotonTrackedTarget target : result.getTargets()) {
             if (target.getFiducialId() == Constants.DriveConstants.kTargetTagId) {
                 Transform3d camToTarget = target.getBestCameraToTarget();
+
+                Transform3d robotToTarget =
+                Constants.PhotonVisionConstants.kRobotVisionOffset.plus(camToTarget);
 
                 double distanceMeters = Math.hypot(
-                    camToTarget.getX(),
-                    camToTarget.getY()
+                    robotToTarget.getX(),
+                    robotToTarget.getY()
                 );
 
-                return OptionalDouble.of(distanceMeters);
+                double yawRadians = Math.atan2(
+                    robotToTarget.getY(),
+                    robotToTarget.getX()
+                );
+
+                return Optional.of(new TagMeasurement(distanceMeters, yawRadians));
             }
         }
 
-        return OptionalDouble.empty();
+        return Optional.empty();
     }
 
-    public OptionalDouble getTargetTagYawRadians() {
-        PhotonPipelineResult result = camera.getLatestResult();
+    // public OptionalDouble getTargetTagYawRadians() {
+    //     PhotonPipelineResult result = camera.getLatestResult();
 
-        if (!result.hasTargets()) {
-            return OptionalDouble.empty();
-        }
+    //     if (!result.hasTargets()) {
+    //         return OptionalDouble.empty();
+    //     }
 
-        for (PhotonTrackedTarget target : result.getTargets()) {
-            if (target.getFiducialId() == Constants.DriveConstants.kTargetTagId) {
-                Transform3d camToTarget = target.getBestCameraToTarget();
-                // In the camera XY plane, yaw to target is atan2(Y, X)
-                double yawRad = Math.atan2(camToTarget.getY(), camToTarget.getX());
-                return OptionalDouble.of(yawRad);
-            }
-        }
+    //     for (PhotonTrackedTarget target : result.getTargets()) {
+    //         if (target.getFiducialId() == Constants.DriveConstants.kTargetTagId) {
+    //             Transform3d camToTarget = target.getBestCameraToTarget();
+    //             // In the camera XY plane, yaw to target is atan2(Y, X)
+    //             double yawRad = Math.atan2(camToTarget.getY(), camToTarget.getX());
+    //             return OptionalDouble.of(yawRad);
+    //         }
+    //     }
 
-        return OptionalDouble.empty();
-    }
+    //     return OptionalDouble.empty();
+    // }
     
     public void setPoseUpdatesEnabled(boolean enabled) {
         this.poseUpdatesEnabled = enabled;

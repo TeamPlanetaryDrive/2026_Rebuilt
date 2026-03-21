@@ -53,8 +53,9 @@ public class hubAlignAssistance extends Command {
         distancePid.reset();
         headingPid.reset();
 
-        OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
-        if (distanceOpt.isPresent()) {
+        var measurementOpt = vision.getTargetTagInformation();
+        
+        if (measurementOpt.isPresent()) {
             lastValidTagTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
         } else {
             lastValidTagTime = -1.0;
@@ -65,14 +66,15 @@ public class hubAlignAssistance extends Command {
 
     @Override
     public void execute() {
-        OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
-        var yawOpt = vision.getTargetTagYawRadians();
+        var measurementOpt = vision.getTargetTagInformation();
 
-        if (distanceOpt.isPresent() && yawOpt.isPresent()) {
+
+        if (measurementOpt.isPresent()) {
             lastValidTagTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
-            double currentDistance = distanceOpt.getAsDouble();
-            double currentYaw = yawOpt.getAsDouble();
+            double currentDistance = measurementOpt.get().distanceMeters();
+            double currentYaw = measurementOpt.get().yawRadians();
+
             // output = MathUtil.clamp(
             //     output,
             //     -Constants.AutoConstants.kMaxSpeedMetersPerSecond,
@@ -104,7 +106,7 @@ public class hubAlignAssistance extends Command {
             );
             SmartDashboard.putNumber("Tag PID Output", speedCmdMps);
             SmartDashboard.putNumber("Tag Yaw (deg)", Math.toDegrees(currentYaw));
-            SmartDashboard.putNumber("Tag Yaw Error", currentYaw - yawOpt);
+            // SmartDashboard.putNumber("Tag Yaw Error", currentYaw - yawOpt);
             SmartDashboard.putNumber("Heading PID Output (rad/s)", rotCmdRps);
 
             // forward/backward only; no driver input
@@ -133,10 +135,12 @@ public class hubAlignAssistance extends Command {
         }
 
         // end if PID is satisfied and we currently still have a distance reading
-        OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
-        var yawOpt = vision.getTargetTagYawRadians();
+
+        var measurementOpt = vision.getTargetTagInformation();
+        // OptionalDouble distanceOpt = vision.getTargetTagDistanceMeters();
+        // var yawOpt = vision.getTargetTagYawRadians();
         
-        if (distanceOpt.isPresent() && yawOpt.isPresent()) {
+        if (measurementOpt.isPresent()) {
             SmartDashboard.putString("Vision Align Status", "reached PID location");
             return distancePid.atSetpoint();
         }

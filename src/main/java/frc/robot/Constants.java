@@ -30,11 +30,11 @@ public final class Constants {
 
     public static final class PhotonVisionConstants {
 
-        public static final double kDistanceFromHub = 2.6;
+        public static final double kDistanceFromHub = 2.5; //meters
 
-        public static final double offsetXMeters = 0.30226;
-        public static final double offsetYMeters = 0.3429;
-        public static final double offsetZMeters = .2286;
+        public static final double offsetXMeters = -0.13335;
+        public static final double offsetYMeters = -0.288925;
+        public static final double offsetZMeters = 0.47625;
         public static final double rotationXMeters = 0;
         public static final double rotationYMeters = 0;
         public static final double rotationZMeters = 0;
@@ -83,16 +83,16 @@ public final class Constants {
 
         public static final boolean kGyroReversed = true;
 
-        public static final double kP = 1.5;
-        public static final double kI = 0.0;
+        public static final double kP = 1.6;
+        public static final double kI = 0.001;
         public static final double kD = 0.0;
 
-        public static final double kDistanceTolerance = 0.1;
+        public static final double kDistanceTolerance = 0.05;
         public static final double kLostTagCancelSec = 1.0;
-        public static final int kTargetTagId = 26; //change
+        public static final int kTargetTagId = 26; //26
 
         public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
-        public static final double hP = 2.0;
+        public static final double hP = 2.1;
         public static final double hI = 0.0;
         public static final double hD = 0.0;
 
