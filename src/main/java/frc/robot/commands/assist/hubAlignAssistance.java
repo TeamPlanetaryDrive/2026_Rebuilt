@@ -81,6 +81,8 @@ public class hubAlignAssistance extends Command {
             //     Constants.AutoConstants.kMaxSpeedMetersPerSecond
             // );
 
+            
+
             double speedCmdMps = MathUtil.clamp(
             distancePid.calculate(
             currentDistance,
@@ -96,7 +98,20 @@ public class hubAlignAssistance extends Command {
                 -Constants.DriveConstants.kMaxAngularSpeedRadiansPerSecond,
                 Constants.DriveConstants.kMaxAngularSpeedRadiansPerSecond
             );
-            double rotCmd = rotCmdRps / Constants.DriveConstants.kMaxAngularSpeedRadiansPerSecond;
+
+            double yawError = 0.0 - currentYaw;
+
+            double rotPid = headingPid.calculate(currentYaw, 0.0);
+
+            double rotFF = 0.0;
+            if (Math.abs(yawError) > Constants.DriveConstants.kHeadingTolerance) {
+                rotFF = Math.copySign(Constants.DriveConstants.kSAngleAlign, yawError);
+            }
+            double rotCmd = MathUtil.clamp(
+                rotPid + rotFF,
+                -Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond,
+                Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond
+            );
 
             SmartDashboard.putNumber("Tag Distance", currentDistance);
             SmartDashboard.putNumber("Speed", xCmd);

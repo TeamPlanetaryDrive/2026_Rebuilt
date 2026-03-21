@@ -30,7 +30,7 @@ public final class Constants {
 
     public static final class PhotonVisionConstants {
 
-        public static final double kDistanceFromHub = 2.5; //meters
+        public static final double kDistanceFromHub = 2.8; //meters
 
         public static final double offsetXMeters = -0.13335;
         public static final double offsetYMeters = -0.288925;
@@ -83,16 +83,19 @@ public final class Constants {
 
         public static final boolean kGyroReversed = true;
 
-        public static final double kP = 1.6;
-        public static final double kI = 0.001;
+        public static final double kP = 1.8;
+        public static final double kI = 0.002;
         public static final double kD = 0.0;
+        public static final double kSAngleAlign = 0.15; // example starting point
 
+    
+        public static final double kHeadingTolerance = 0.1; // degrees
         public static final double kDistanceTolerance = 0.05;
         public static final double kLostTagCancelSec = 1.0;
-        public static final int kTargetTagId = 26; //26
+        public static final int kTargetTagId = 10; //26 for blue. 10 for red
 
         public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
-        public static final double hP = 2.1;
+        public static final double hP = 0.5;
         public static final double hI = 0.0;
         public static final double hD = 0.0;
 

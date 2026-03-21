@@ -110,13 +110,13 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
     // start intake
     public void start() {
         setIntakeSpeed(600);
-        setRotateSpeed(-4, 10);
+        setRotateSpeed(-40, 10);
         // CHANGED: Removed setIntakeAngle so this method ONLY spins the rollers
     }
 
     public void rotateAndSpin(){
         setIntakeSpeed(600);
-        setRotateSpeed(-40,40);
+        setRotateSpeed(40,40);
 
     }
 

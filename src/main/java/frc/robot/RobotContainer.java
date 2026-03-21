@@ -168,21 +168,22 @@ public class RobotContainer {
 
     // Hold A to raise the feeder, release A to lower it back to 0 (FIX THIS SO IT DOES NOT GO SO FAST+GET ENCODER)
     new JoystickButton(m_driverController, Button.kA.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.rotateAndSpin()))  // Goes up when pressed
+        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(-40, 40)))  // Goes up when pressed
         .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
     new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(40, 40)))  // Goes up when pressed
+        .onTrue(m_intake.runOnce(() -> m_intake.rotateAndSpin()))  // Goes up when pressed
         .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
 
       new JoystickButton(m_driverController, Button.kX.value)
           .whileTrue(new hubAlignAssistance(m_robotDrive, m_photonVision));
 
-      new JoystickButton(m_driverController, Button.kA.value)
+      new JoystickButton(m_driverController, Button.kY.value)
         .onTrue(m_robotDrive.runOnce(() -> m_robotDrive.resetGyro()));
   }
 
   public Command getAutonomousCommand() {
     return MoveBackAndShoot.create(m_robotDrive, m_shooter);
     // return autoChooser.getSelected();
+    // return LeftIntakeAuto.create(m_robotDrive, m_intake, m_shooter);
   }
 }
