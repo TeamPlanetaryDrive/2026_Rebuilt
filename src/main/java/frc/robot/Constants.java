@@ -89,7 +89,7 @@ public final class Constants {
 
         public static final double kDistanceTolerance = 0.1;
         public static final double kLostTagCancelSec = 1.0;
-        public static final int kTargetTagId = 7; //change
+        public static final int kTargetTagId = 26; //change
 
         public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
         public static final double hP = 2.0;
