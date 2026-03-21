@@ -83,16 +83,16 @@ public final class Constants {
 
         public static final boolean kGyroReversed = true;
 
-        public static final double kP = 1.0;
+        public static final double kP = 1.5;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
 
         public static final double kDistanceTolerance = 0.1;
         public static final double kLostTagCancelSec = 1.0;
-        public static final int kTargetTagId = 26; //change
+        public static final int kTargetTagId = 7; //change
 
         public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
-        public static final double hP = 1.0;
+        public static final double hP = 2.0;
         public static final double hI = 0.0;
         public static final double hD = 0.0;
 
