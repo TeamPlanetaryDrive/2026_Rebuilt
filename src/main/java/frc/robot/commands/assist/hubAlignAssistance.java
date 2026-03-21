@@ -104,10 +104,11 @@ public class hubAlignAssistance extends Command {
             );
             SmartDashboard.putNumber("Tag PID Output", speedCmdMps);
             SmartDashboard.putNumber("Tag Yaw (deg)", Math.toDegrees(currentYaw));
+            SmartDashboard.putNumber("Tag Yaw Error", currentYaw - yawOpt);
             SmartDashboard.putNumber("Heading PID Output (rad/s)", rotCmdRps);
 
             // forward/backward only; no driver input
-            drive.drive(-xCmd, 0.0, rotCmd, false);
+            drive.drive(-xCmd, 0.0, -rotCmd, false);
         } else {
             // lost tag temporarily: stop while waiting briefly
             drive.drive(0.0, 0.0, 0.0, false);
