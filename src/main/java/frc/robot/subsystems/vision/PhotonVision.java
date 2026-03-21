@@ -127,8 +127,8 @@ public class PhotonVision extends SubsystemBase {
                 Constants.PhotonVisionConstants.kRobotVisionOffset.plus(camToTarget);
 
                 double distanceMeters = Math.hypot(
-                    robotToTarget.getX(),
-                    robotToTarget.getY()
+                    camToTarget.getX(),
+                    camToTarget.getY()
                 );
 
                 double yawRadians = Math.atan2(

@@ -168,7 +168,7 @@ public class RobotContainer {
 
     // Hold A to raise the feeder, release A to lower it back to 0 (FIX THIS SO IT DOES NOT GO SO FAST+GET ENCODER)
     new JoystickButton(m_driverController, Button.kA.value)
-        .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(-40, 40)))  // Goes up when pressed
+        .onTrue(m_intake.runOnce(() -> m_intake.rotateAndSpin()))  // Goes up when pressed
         .onFalse(m_intake.runOnce(() -> m_intake.coastIntakeRotate()));  // Goes down when released
     new JoystickButton(m_driverController, Button.kB.value)
         .onTrue(m_intake.runOnce(() -> m_intake.setRotateSpeed(40, 40)))  // Goes up when pressed

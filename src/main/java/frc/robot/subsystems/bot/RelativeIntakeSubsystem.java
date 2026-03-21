@@ -104,6 +104,7 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
 
     public void coastIntakeRotate(){
         intakeAngleMotor.set(0);
+        intakeSpinMotor.set(0);
     }
     
     // start intake
@@ -111,6 +112,12 @@ public class RelativeIntakeSubsystem extends SubsystemBase {
         setIntakeSpeed(600);
         setRotateSpeed(-4, 10);
         // CHANGED: Removed setIntakeAngle so this method ONLY spins the rollers
+    }
+
+    public void rotateAndSpin(){
+        setIntakeSpeed(600);
+        setRotateSpeed(-40,40);
+
     }
 
     public void stop() {
