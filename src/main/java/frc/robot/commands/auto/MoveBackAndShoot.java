@@ -92,9 +92,11 @@ public class MoveBackAndShoot{
                 shooter.feedBackward();
             }, shooter),
             Commands.waitSeconds(1.0),
-            Commands.runOnce(shooter::feedForward, shooter)
+            Commands.runOnce(shooter::feedForward, shooter),
+            Commands.waitSeconds(5.0)
         ).finallyDo(interrupted -> {
             drive.drive(0, 0, 0, true);
+            shooter.stop();
             drive.enableVisionPoseUpdates();
         });
     }, Set.of(drive, shooter));
