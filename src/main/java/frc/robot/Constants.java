@@ -38,7 +38,7 @@ public final class Constants {
         public static final double rotationXMeters = 0;
         public static final double rotationYMeters = 0;
         public static final double rotationZMeters = 0;
-        public static final Transform3d transform = new Transform3d(new Translation3d(offsetXMeters, offsetYMeters, offsetZMeters),
+        public static final Transform3d kRobotVisionOffset = new Transform3d(new Translation3d(offsetXMeters, offsetYMeters, offsetZMeters),
                                                                     new Rotation3d(rotationXMeters, rotationYMeters, rotationZMeters));
     }
     
@@ -83,7 +83,7 @@ public final class Constants {
 
         public static final boolean kGyroReversed = true;
 
-        public static final double kP = 1.0;
+        public static final double kP = 1.2;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
 
@@ -92,7 +92,7 @@ public final class Constants {
         public static final int kTargetTagId = 26; //26
 
         public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
-        public static final double hP = 1.0;
+        public static final double hP = 2.0;
         public static final double hI = 0.0;
         public static final double hD = 0.0;
 
