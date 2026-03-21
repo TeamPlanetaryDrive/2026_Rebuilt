@@ -142,6 +142,11 @@ public final class Constants {
         public static final double kPYController = 0.0002;
         public static final double kPThetaController = 0.00001;
 
+        public static final double kMiddleIntakeDistance = 3.5941; //meters
+        public static final double kMaxIntakeVelocity = 0.5; // meters per second
+        public static final double kMaxIntakeAcceleration = 0.5; // meters per second squared
+        public static final double kMaxIntakeTime = 5.0; // seconds
+
         // Constraint for the motion profiled robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
