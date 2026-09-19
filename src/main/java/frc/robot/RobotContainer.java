@@ -66,7 +66,7 @@ public class RobotContainer {
   private final SlewRateLimiter m_xLimiter = new SlewRateLimiter(3.0);
   private final SlewRateLimiter m_yLimiter = new SlewRateLimiter(3.0);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3.0);
-  
+
   //private final TrajectoryFollowerBuilder follower = new TrajectoryFollowerBuilder(m_robotDrive, m_photonVision, m_robotDrive::getPose);
 
   /**
@@ -84,21 +84,42 @@ public class RobotContainer {
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+  SmartDashboard.setDefaultNumber("Drive Speed Factor", 1.0);
 
     // Configure default commands
-    m_robotDrive.setDefaultCommand(
-      // The left stick controls translation of the robot.
-      // Turning is controlled by the X axis of the right stick.
-      new RunCommand(
-        () -> m_robotDrive.drive(
-          m_xLimiter.calculate(-MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)),
-          m_yLimiter.calculate(-MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)),
-          m_rotLimiter.calculate(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)),
-           true),
+  m_robotDrive.setDefaultCommand(
+    // The left stick controls translation of the robot.
+    // Turning is controlled by the X axis of the right stick.
+    new RunCommand(
+        () -> {
+          double speedFactor = SmartDashboard.getNumber("Drive Speed Factor", 1.0);
+
+          m_robotDrive.drive(
+              speedFactor * m_xLimiter.calculate(
+                  -MathUtil.applyDeadband(
+                      m_driverController.getLeftY(),
+                      OIConstants.kDriveDeadband
+                  )
+              ),
+              speedFactor * m_yLimiter.calculate(
+                  -MathUtil.applyDeadband(
+                      m_driverController.getLeftX(),
+                      OIConstants.kDriveDeadband
+                  )
+              ),
+              speedFactor * m_rotLimiter.calculate(
+                  -MathUtil.applyDeadband(
+                      m_driverController.getRightX(),
+                      OIConstants.kDriveDeadband
+                  )
+              ),
+              true
+          );
+        },
         m_robotDrive
-      )
-    );
-  }
+    )
+);
+}
 
   // driver tab
   private void configureDashboard() {
