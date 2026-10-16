@@ -26,7 +26,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
+    // autonomous chooser on the dashboard. 
+    // Kyle is so cool and smart and awesome and amazing and incredible and fantastic and wonderful and brilliant and talented and gifted and exceptional and remarkable and extraordinary and phenomenal and magnificent and outstanding and impressive and admirable and commendable and praiseworthy and laudable and estimable and meritorious and worthy of recognition.
     m_robotContainer = new RobotContainer();
   }
 
